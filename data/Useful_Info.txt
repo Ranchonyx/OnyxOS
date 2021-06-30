@@ -1,0 +1,33 @@
+Segments
+A Segment is simply a part of a whole. In our case, A segment is a section of memory. Yep--Thats basically all it is.
+Imagine dividing memory into sections. These sections represent segments.
+
+The x86 Family of processors uses 4 primary registes that store the beginning location of a segment. Its like a base address--It provides the start of a segment.
+
+Normally, a segment may be 64 KB in size, and are freely movable.
+
+Remember that segments simply epresent a section in memory. In this case, if the segment base address is 0, then this represents the segment between byte 0 and 64 KB.
+
+The registers are CS, DS, ES, and SS. These registers store the base address for the segments. We will take a closer look at them after we look at addressing with this mode.
+
+Offsets
+An offset is a number that is added to a base number. For example, if the base number is 3:
+Offset = base number (3) + the offset number
+Offset 2 is 3+2 = 5
+Offset 4 is 3+4 = 7
+
+Okay, so how does this relate to us? Well, in segment:offset addressing, we add the Base Address (Remember that a segment represents a base address) with the offset address!
+
+Pretty simple, huh? Now, lets put it all together.
+
+Segment:Offset Addressing
+In Segment:Offset Addressing, we simply add the offset address with the segment address. However, in the previous section, I mentioned that each segment address in Real Mode is 16 bits in size. This means we also have to multiply our segment by 16(decimal), and then we add the offset. So, heres our current formula:
+Absolute (Exact) Memory Address = (Segment Address * 16(decimal)) + Offset
+
+Segment:Offset Conventions
+Segment and offset addresses are useually seperated by a colen (:). They are useually of the form Segment : Offset. For example:
+07C0:0000    < 07C0 is the segment, and 0 is the offset
+We can convert the above to the absolute address 0x7C00 by using our formula:
+                 base address = base address * segment size (16) + offset
+			              07C0:0000 = 07C0 * 16 (decimal) + 0
+                                  = 07C00 + 0 = 0x7C00
