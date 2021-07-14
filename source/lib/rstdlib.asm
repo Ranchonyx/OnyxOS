@@ -66,23 +66,8 @@ popa
 ret
 
 ;**************************************
-; Print available memory
+; Halt system
 ;**************************************
-PrintMemory:
-xor cx, cx
-xor dx, dx
-mov ax, 0xe801
-int 0x15
-
-;????? osdev is weird sometimes
-
-mov ax, cx
-mov bx, dx
-
-shr al, 8
-and ah, 0x00ff
-
-call PrintChar
-mov al, ah
-call PrintChar
+Halt:
+hlt
 ret
