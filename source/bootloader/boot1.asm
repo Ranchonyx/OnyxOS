@@ -12,7 +12,7 @@ protmode_msg  DB "[OnyxOS] Moving to 32-Bit Protected Mode"    ,0
 
 
 ;Include the retard standard assembly library
-%include "../lib/rstdlib.asm"
+%include "./rstdlib.asm"
 
 loader_entry:
 
@@ -55,7 +55,7 @@ mov cr0, eax
 jmp 08h:clear_pipe
 
 bits 32
-%include "../lib/rstdlib32.asm"
+%include "./rstdlib32.asm"
 clear_pipe:
 ; Magic happens after this line
 ; Do not use rstdlib anymore
