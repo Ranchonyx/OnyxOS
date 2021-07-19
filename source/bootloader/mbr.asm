@@ -13,7 +13,7 @@ error	      db "[OnyxOS] Disk Error / Sector Error"	       ,0
 BOOT_DRIVE    db 0
 
 ;Include the retard standard assembly library
-%include "../lib/asm/rstdlib.asm"
+%include "source/lib/asm/rstdlib.asm"
 
 loader_entry:
 
@@ -48,14 +48,14 @@ call sw32
 
 jmp $
 
-%include "../lib/asm/disk.asm"
-%include "../lib/asm/gdt.asm"
-%include "../lib/asm/sw32.asm"
+%include "source/lib/asm/disk.asm"
+%include "source/lib/asm/gdt.asm"
+%include "source/lib/asm/sw32.asm"
 
 [bits 16]
 lkernel:
 	mov bx, KOFFSET
-	mov dh, 2
+	mov dh, 16
 	mov dl, [BOOT_DRIVE]
 	call disk_load
 	ret

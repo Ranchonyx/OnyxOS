@@ -1,4 +1,6 @@
+#include "vga.h"
+
 void main() {
-char* vidmem = (char*) 0xb8000;
-*vidmem = 'X';
+	clrscr();
+	print_string("Hello World!\n");
 }
