@@ -1,7 +1,0 @@
-PUT INCLUDE DIRECTIVES BELOW
-the defines (db, dw, dd etc)
-AND BELOW THE JUMP TO LOADER
-because reasons
-string gets literally idk translated into executable bytes and shit
-(evil fucking magic)
-string gets injected in same line as written which is fucking not ok
