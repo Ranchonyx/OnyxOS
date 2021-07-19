@@ -1,6 +1,7 @@
 #include "vga.h"
 #include "ports.h"
 #include "util.h"
+#include "decor.h"
 
 void clrscr()
 {
@@ -55,6 +56,26 @@ void print_string(char *str)
 	set_cursor(offset);
 }
 
+void println_string(char *str)
+{
+	int offset = get_cursor();
+	int i = 0;
+	while(str[i] != 0) {
+		if(offset >= ROWS_MAX * COLS_MAX * 2) {
+			offset = scroll_ln(offset);
+		}
+		if(str[i] == '\n') {
+			offset = move_offset_to_newline(offset);
+		} else {
+		set_char_at_offset(str[i], offset);
+		offset += 2;
+		}
+	i++;
+	}
+	offset = move_offset_to_newline(offset);
+	set_cursor(offset);
+}
+
 int row_from_offset(int offset)
 {
 	return offset / (2 * COLS_MAX);
@@ -83,4 +104,16 @@ int scroll_ln(int offset)
 	}
 
 	return offset - 2 * COLS_MAX;
+}
+
+void print_logo()
+{
+	println_string(LOGO_L1);
+	println_string(LOGO_L2);
+	println_string(LOGO_L3);
+	println_string(LOGO_L4);
+	println_string(LOGO_L4);
+	println_string(LOGO_L5);
+	println_string(LOGO_L6);
+	println_string(LOGO_L7);
 }

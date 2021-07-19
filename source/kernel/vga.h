@@ -15,7 +15,10 @@ void	set_cursor(int offset);
 int	get_cursor();
 void	set_char_at_offset(char chr, int offset);
 void	print_string(char *str);
+void	println_string(char *str);
 int	row_from_offset(int offset);
 int	get_offset(int col, int row);
 int	move_offset_to_newline(int offset);
 int	scroll_ln(int offset);
+void	print_logo();
+
