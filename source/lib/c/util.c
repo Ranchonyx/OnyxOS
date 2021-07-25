@@ -1,19 +1,5 @@
 #include "util.h"
-
-int strlen(char s[])
-{
-	int i = 0;
-	while(s[i] != '\0') ++i;
-	return i;
-}
-
-void memcpy(char *src, char *dst, int n)
-{
-	int i;
-	for(i = 0; i < n; i++) {
-		*(dst + i) = *(src + i);
-	}
-}
+#include "string.h"
 
 void reverse(char s[])
 {
