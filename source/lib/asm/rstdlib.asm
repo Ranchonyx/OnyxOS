@@ -10,17 +10,6 @@ int 10h
 ret
 
 ;**************************************
-; Prints a single character/value/register
-; AL: register
-;**************************************
-PrintChar:
-mov ah, 0eh
-int 10h
-cmp bl, 1
-je PrintNewline
-ret
-
-;**************************************
 ;	Prints a string
 ;	DS=>SI: 0 terminated string
 ;**************************************
@@ -49,7 +38,9 @@ loop:
 inc al
 cmp al, 255
 je exit
-call PrintChar
+mov ah, 0eh
+int 10h
+cmp bl, 1
 jmp loop
 exit:
 ret

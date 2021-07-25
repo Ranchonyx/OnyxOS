@@ -1,16 +1,13 @@
 #include "vga.h"
-#include "ports.h"
-#include "util.h"
-#include "decor.h"
 
-void clrscr()
+
+void clrscr(int color)
 {
 	for(int i = 0; i < COLS_MAX * ROWS_MAX; ++i) {
-		set_char_at_offset(' ', i * 2);
+		set_char_at_offset(' ', i * 2, color);
 	}
 	set_cursor(get_offset(0, 0));
 }
-
 
 void set_cursor(int offset)
 {
@@ -30,14 +27,14 @@ int get_cursor()
 	return offset * 2;
 }
 
-void set_char_at_offset(char chr, int offset)
+void set_char_at_offset(const char chr, int offset, int color)
 {
 	unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
 	vidmem[offset] = chr;
-	vidmem[offset + 1] = WHITE_ON_BLACK;
+	vidmem[offset + 1] = color;
 }
 
-void print_string(char *str)
+void print_string(const char *str)
 {
 	int offset = get_cursor();
 	int i = 0;
@@ -48,7 +45,7 @@ void print_string(char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at_offset(str[i], offset);
+		set_char_at_offset(str[i], offset, ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 		offset += 2;
 		}
 	i++;
@@ -56,7 +53,7 @@ void print_string(char *str)
 	set_cursor(offset);
 }
 
-void println_string(char *str)
+void println_string(const char *str)
 {
 	int offset = get_cursor();
 	int i = 0;
@@ -67,7 +64,7 @@ void println_string(char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at_offset(str[i], offset);
+		set_char_at_offset(str[i], offset, ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 		offset += 2;
 		}
 	i++;
@@ -100,20 +97,15 @@ int scroll_ln(int offset)
 	);
 
 	for(int col = 0; col < COLS_MAX; col++) {
-		set_char_at_offset(' ', get_offset(col, ROWS_MAX - 1));
+		set_char_at_offset(' ', get_offset(col, ROWS_MAX - 1), ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 	}
 
 	return offset - 2 * COLS_MAX;
 }
 
-void print_logo()
-{
-	println_string(LOGO_L1);
-	println_string(LOGO_L2);
-	println_string(LOGO_L3);
-	println_string(LOGO_L4);
-	println_string(LOGO_L4);
-	println_string(LOGO_L5);
-	println_string(LOGO_L6);
-	println_string(LOGO_L7);
+void pixel(unsigned char* screen, int x, int y, int pixelwidth, int pitch, int color) {
+    unsigned where = x*pixelwidth + y*pitch;
+    screen[where] = color & 255;              // BLUE
+    screen[where + 1] = (color >> 8) & 255;   // GREEN
+    screen[where + 2] = (color >> 16) & 255;  // RED
 }

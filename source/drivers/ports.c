@@ -1,3 +1,5 @@
+#include "ports.h"
+
 unsigned char in(unsigned short port)
 {
 	unsigned char result;
