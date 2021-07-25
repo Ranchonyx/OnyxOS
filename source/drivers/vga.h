@@ -22,12 +22,12 @@
 void 	clrscr(int color);
 void	set_cursor(int offset);
 int	  get_cursor();
-void	set_char_at_offset(const char chr, int offset, int color);
+void	set_char_at(int offset, const char chr, const char color);
 void	print_string(const char *str);
 void	println_string(const char *str);
 int	  row_from_offset(int offset);
 int	  get_offset(int col, int row);
 int	  move_offset_to_newline(int offset);
 int	  scroll_ln(int offset);
-void pixel(unsigned char* screen, int x, int y, int pixelwidth, int pitch, int color);
+void  pixel(unsigned char* screen, int x, int y, int pixelwidth, int pitch, int color);
 #endif /* end of include guard: VGA_H */

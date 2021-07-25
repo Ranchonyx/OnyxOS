@@ -4,7 +4,7 @@
 void clrscr(int color)
 {
 	for(int i = 0; i < COLS_MAX * ROWS_MAX; ++i) {
-		set_char_at_offset(' ', i * 2, color);
+		set_char_at(i * 2, ' ', color);
 	}
 	set_cursor(get_offset(0, 0));
 }
@@ -27,7 +27,7 @@ int get_cursor()
 	return offset * 2;
 }
 
-void set_char_at_offset(const char chr, int offset, int color)
+void set_char_at(int offset, const char chr, const char color)
 {
 	unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
 	vidmem[offset] = chr;
@@ -45,7 +45,7 @@ void print_string(const char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at_offset(str[i], offset, ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
+		set_char_at(offset, str[i], ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 		offset += 2;
 		}
 	i++;
@@ -64,7 +64,7 @@ void println_string(const char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at_offset(str[i], offset, ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
+		set_char_at(offset, str[i], ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 		offset += 2;
 		}
 	i++;
@@ -97,7 +97,7 @@ int scroll_ln(int offset)
 	);
 
 	for(int col = 0; col < COLS_MAX; col++) {
-		set_char_at_offset(' ', get_offset(col, ROWS_MAX - 1), ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
+		set_char_at(get_offset(col, ROWS_MAX - 1), ' ', ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 	}
 
 	return offset - 2 * COLS_MAX;
