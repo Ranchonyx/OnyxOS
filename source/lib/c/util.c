@@ -3,7 +3,8 @@
 
 void reverse(char s[])
 {
-	int c, i, j;
+	int c;
+  size_t i, j;
 	for(i = 0, j = strlen(s) - 1; i < j; i++, j--) {
 		c = s[i];
 		s[i] = s[j];
@@ -13,7 +14,8 @@ void reverse(char s[])
 
 void itos(int n, char str[])
 {
-	int i, sign;
+  size_t i;
+	int sign;
 	if((sign = n) < 0) n = -n;
 		i = 0;
 		do {

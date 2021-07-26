@@ -1,15 +1,15 @@
 #include "vga.h"
 
 
-void clrscr(int color)
+void clrscr(const char color)
 {
-	for(int i = 0; i < COLS_MAX * ROWS_MAX; ++i) {
+	for(size_t i = 0; i < COLS_MAX * ROWS_MAX; ++i) {
 		set_char_at(i * 2, ' ', color);
 	}
 	set_cursor(get_offset(0, 0));
 }
 
-void set_cursor(int offset)
+void set_cursor(size_t offset)
 {
 	offset /= 2;
 	out(VGA_CTRL_REG, VGA_OFFSET_HIGH);
@@ -18,16 +18,16 @@ void set_cursor(int offset)
 	out(VGA_DATA_REG, (unsigned char) (offset & 0xFF));
 }
 
-int get_cursor()
+size_t get_cursor()
 {
 	out(VGA_CTRL_REG, VGA_OFFSET_HIGH);
-	int offset = in(VGA_DATA_REG) << 8;
+	size_t offset = in(VGA_DATA_REG) << 8;
 	out(VGA_CTRL_REG, VGA_OFFSET_LOW);
 	offset += in(VGA_DATA_REG);
 	return offset * 2;
 }
 
-void set_char_at(int offset, const char chr, const char color)
+void set_char_at(size_t offset, const char chr, const char color)
 {
 	unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
 	vidmem[offset] = chr;
@@ -36,8 +36,8 @@ void set_char_at(int offset, const char chr, const char color)
 
 void print_string(const char *str)
 {
-	int offset = get_cursor();
-	int i = 0;
+	size_t offset = get_cursor();
+	size_t i = 0;
 	while(str[i] != 0) {
 		if(offset >= ROWS_MAX * COLS_MAX * 2) {
 			offset = scroll_ln(offset);
@@ -55,8 +55,8 @@ void print_string(const char *str)
 
 void println_string(const char *str)
 {
-	int offset = get_cursor();
-	int i = 0;
+	size_t offset = get_cursor();
+	size_t i = 0;
 	while(str[i] != 0) {
 		if(offset >= ROWS_MAX * COLS_MAX * 2) {
 			offset = scroll_ln(offset);
@@ -73,22 +73,22 @@ void println_string(const char *str)
 	set_cursor(offset);
 }
 
-int row_from_offset(int offset)
+size_t row_from_offset(size_t offset)
 {
 	return offset / (2 * COLS_MAX);
 }
 
-int get_offset(int col, int row)
+size_t get_offset(size_t col, size_t row)
 {
 	return 2 * (row * COLS_MAX + col);
 }
 
-int move_offset_to_newline(int offset)
+size_t move_offset_to_newline(size_t offset)
 {
 	return get_offset(0, row_from_offset(offset) + 1);
 }
 
-int scroll_ln(int offset)
+int scroll_ln(size_t offset)
 {
 	memcpy(
 		(char *) (get_offset(0, 1) + VIDMEM_ADDR),
@@ -96,16 +96,16 @@ int scroll_ln(int offset)
 		COLS_MAX * (ROWS_MAX - 1) * 2
 	);
 
-	for(int col = 0; col < COLS_MAX; col++) {
+	for(size_t col = 0; col < COLS_MAX; col++) {
 		set_char_at(get_offset(col, ROWS_MAX - 1), ' ', ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
 	}
 
 	return offset - 2 * COLS_MAX;
 }
 
-void pixel(unsigned char* screen, int x, int y, int pixelwidth, int pitch, int color) {
-    unsigned where = x*pixelwidth + y*pitch;
-    screen[where] = color & 255;              // BLUE
-    screen[where + 1] = (color >> 8) & 255;   // GREEN
-    screen[where + 2] = (color >> 16) & 255;  // RED
+void pixel(unsigned char* screen, size_t x, size_t y, size_t pixelwidth, int pitch, color rgb) {
+    size_t where = x*pixelwidth + y*pitch;
+    screen[where] = rgb.blue;                 // BLUE
+    screen[where + 1] = rgb.green;            // GREEN
+    screen[where + 2] = rgb.red;              // RED
 }
