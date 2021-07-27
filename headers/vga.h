@@ -1,10 +1,8 @@
 #ifndef VGA_H
 #define VGA_H
-#include <stdint.h>
-#include "ports.h"
-#include "../lib/c/util.h"
-#include "../lib/c/stdint.h"
-#include "../lib/c/stddef.h"
+
+#include "stdint.h"
+#include "stddef.h"
 
 #define VGA_CTRL_REG		0x3D4
 #define VGA_DATA_REG		0x3D5

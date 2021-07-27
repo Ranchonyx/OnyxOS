@@ -1,10 +1,11 @@
 #include "util.h"
 #include "string.h"
+#include "stddef.h"
 
 void reverse(char s[])
 {
-	int c;
-  size_t i, j;
+	char c;
+	size_t i, j;
 	for(i = 0, j = strlen(s) - 1; i < j; i++, j--) {
 		c = s[i];
 		s[i] = s[j];
@@ -14,18 +15,19 @@ void reverse(char s[])
 
 void itos(int n, char str[])
 {
-  size_t i;
+	size_t i;
 	int sign;
 	if((sign = n) < 0) n = -n;
-		i = 0;
-		do {
-			str[i++] = n % 10 + '0';
-		} while((n /= 10) > 0);
+	
+	i = 0;
+	do {
+		str[i++] = n % 10 + '0';
+	} while((n /= 10) > 0);
 
-		if(sign < 0) str[i++] = '-';
-		str[i] = '\0';
+	if(sign < 0) str[i++] = '-';
+	str[i] = '\0';
 
-		reverse(str);
+	reverse(str);
 }
 
 //Literally Fast-Nop's C incarnation

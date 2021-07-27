@@ -1,5 +1,5 @@
-#include "../drivers/vga.h"
-#include "../lib/c/types.h"
+#include "vga.h"
+#include "util.h"
 
 //Main kernel entry point
 void main() {
