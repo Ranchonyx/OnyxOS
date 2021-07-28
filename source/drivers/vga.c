@@ -1,5 +1,6 @@
 #include "vga.h"
-
+#include "string.h"
+#include "ports.h"
 
 void clrscr(const char color)
 {
