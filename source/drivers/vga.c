@@ -54,6 +54,25 @@ void print_string(const char *str)
 	set_cursor(offset);
 }
 
+void print_string_color(const char* str, const char color)
+{
+	size_t offset = get_cursor();
+	size_t i = 0;
+	while(str[i] != 0) {
+		if(offset >= ROWS_MAX * COLS_MAX * 2) {
+			offset = scroll_ln(offset);
+		}
+		if(str[i] == '\n') {
+			offset = move_offset_to_newline(offset);
+		} else {
+		set_char_at(offset, str[i], color);
+		offset += 2;
+		}
+	i++;
+	}
+	set_cursor(offset);
+}
+
 void println_string(const char *str)
 {
 	size_t offset = get_cursor();
@@ -66,6 +85,26 @@ void println_string(const char *str)
 			offset = move_offset_to_newline(offset);
 		} else {
 		set_char_at(offset, str[i], ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
+		offset += 2;
+		}
+	i++;
+	}
+	offset = move_offset_to_newline(offset);
+	set_cursor(offset);
+}
+
+void println_string_color(const char *str, const char color)
+{
+	size_t offset = get_cursor();
+	size_t i = 0;
+	while(str[i] != 0) {
+		if(offset >= ROWS_MAX * COLS_MAX * 2) {
+			offset = scroll_ln(offset);
+		}
+		if(str[i] == '\n') {
+			offset = move_offset_to_newline(offset);
+		} else {
+		set_char_at(offset, str[i], color);
 		offset += 2;
 		}
 	i++;
@@ -109,4 +148,15 @@ void pixel(unsigned char* screen, size_t x, size_t y, size_t pixelwidth, int pit
     screen[where] = rgb.blue;                 // BLUE
     screen[where + 1] = rgb.green;            // GREEN
     screen[where + 2] = rgb.red;              // RED
+}
+
+void color_test()
+{
+	char color = 0x00;
+	char _color = 0xf0;
+	for(int i = 0; i < 256; i++) {
+		print_string_color("#", color+_color);
+		color++;
+		_color++;
+	}
 }

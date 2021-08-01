@@ -17,18 +17,18 @@ PrintString:
 			xor 			ax,ax
 			mov 			ds,ax
 			mov 			es,ax
-			lodsb					; load next byte from string from SI to AL
-			or				al, al		; Is AL=0?
-			jz				PrintDone	; Yep, null terminator found-bail out
-			mov				ah,	0eh	; Nope Print the character
+			lodsb
+			or				al, al
+			jz				PrintDone
+			mov				ah,	0eh
 			int				10h
-			jmp				PrintString		; Repeat until null terminator found
+			jmp				PrintString
 PrintDone:
 			cmp bl, 1
 			je PrintNewline
 			xor 	ax,ax
 			int 	0x12
-			ret					; we are done, so return
+			ret
 
 ;**************************************
 ; Print all Ascii Characters

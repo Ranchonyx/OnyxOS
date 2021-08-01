@@ -1,3 +1,5 @@
+#Thanks yuri for all the help with makefiles
+
 C_SOURCES := $(shell find source -name *.c)
 HEADERS := $(shell find source -name *.h)
 OBJ_FILES := $(patsubst source/%.c, obj/%.o, $(C_SOURCES) )
@@ -28,7 +30,7 @@ bin/sys.bin:            bin/bootloader/mbr.bin bin/kernel/kernel.bin
 	cat $^ > $@
 
 run:                    bin/sys.bin
-	qemu-system-x86_64 -soundhw pcspk -hda $<
+	qemu-system-x86_64 -cpu max -soundhw pcspk -hda $<
 
 obj/%.o: source/%.c ${HEADERS}
 	gcc $(GCC_FLAGS) -c $< -o $@

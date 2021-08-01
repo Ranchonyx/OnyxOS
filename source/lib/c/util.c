@@ -1,7 +1,7 @@
 #include "util.h"
 #include "string.h"
 #include "stddef.h"
-
+#include "vga.h"
 void reverse(char s[])
 {
 	char c;
@@ -18,7 +18,7 @@ void itos(int n, char str[])
 	size_t i;
 	int sign;
 	if((sign = n) < 0) n = -n;
-	
+
 	i = 0;
 	do {
 		str[i++] = n % 10 + '0';
@@ -37,4 +37,15 @@ void delaySeconds(int s)
 	for(volatile int i = 0; i < time ; i++) {
 		__asm volatile ("nop" : : : "memory");
 	}
+}
+
+void printLogo()
+{
+	println_string_color("     _/_/                                    _/_/      _/_/_/   ", YELLOW_ON_BLACK);
+	println_string_color("  _/    _/  _/_/_/    _/    _/  _/    _/  _/    _/  _/          ", YELLOW_ON_BLACK);
+	println_string_color(" _/    _/  _/    _/  _/    _/    _/_/    _/    _/    _/_/       ", YELLOW_ON_BLACK);
+	println_string_color("_/    _/  _/    _/  _/    _/  _/    _/  _/    _/        _/      ", YELLOW_ON_BLACK);
+	println_string_color(" _/_/    _/    _/    _/_/_/  _/    _/    _/_/    _/_/_/         ", YELLOW_ON_BLACK);
+	println_string_color("                        _/                                      ", YELLOW_ON_BLACK);
+	println_string_color("                   _/_/                                         ", YELLOW_ON_BLACK);
 }

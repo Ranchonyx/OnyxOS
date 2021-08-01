@@ -66,8 +66,6 @@ lkernel:
 
 [bits 32]
 BEGIN_32_BIT:
-
-
 call KOFFSET
 jmp $
 
