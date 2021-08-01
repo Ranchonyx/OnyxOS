@@ -3,7 +3,7 @@
 C_SOURCES := $(shell find source -name *.c)
 HEADERS := $(shell find source -name *.h)
 OBJ_FILES := $(patsubst source/%.c, obj/%.o, $(C_SOURCES) )
-GCC_FLAGS := -Iheaders -m32 -fno-pie -ffreestanding
+GCC_FLAGS := -Iheaders -m32 -fno-pie -ffreestanding -fno-strict-overflow
 NASM_FLAGS := -Isource/lib/asm
 
 #The directory structure of bin/ and obj/
@@ -30,7 +30,7 @@ bin/sys.bin:            bin/bootloader/mbr.bin bin/kernel/kernel.bin
 	cat $^ > $@
 
 run:                    bin/sys.bin
-	qemu-system-x86_64 -cpu max -soundhw pcspk -hda $<
+	qemu-system-x86_64 -enable-kvm -cpu host -soundhw pcspk -drive file=$<,format=raw,index=0,media=disk
 
 obj/%.o: source/%.c ${HEADERS}
 	gcc $(GCC_FLAGS) -c $< -o $@
