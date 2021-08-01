@@ -16,7 +16,7 @@ error	        db "Disk Error / Load Error / No CPUID"			     ,0
 BOOT_DRIVE    db 0
 
 ;Include the retard standard assembly library
-%include "source/lib/asm/rstdlib.asm"
+%include "rstdlib.asm"
 
 loader_entry:
 
@@ -51,10 +51,10 @@ call sw32
 
 jmp $
 
-%include "source/lib/asm/disk.asm"
-%include "source/lib/asm/gdt.asm"
-%include "source/lib/asm/sw32.asm"
-%include "source/lib/asm/print32.asm"
+%include "disk.asm"
+%include "gdt.asm"
+%include "sw32.asm"
+%include "print32.asm"
 
 [bits 16]
 lkernel:
