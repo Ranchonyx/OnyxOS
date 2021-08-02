@@ -1,6 +1,7 @@
 #include "vga.h"
 #include "string.h"
 #include "ports.h"
+#include "util.h"
 
 void clrscr(const char color)
 {
@@ -158,5 +159,6 @@ void color_test()
 		print_string_color("#", color+_color);
 		color++;
 		_color++;
+		//delaySeconds(1);
 	}
 }

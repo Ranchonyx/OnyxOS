@@ -51,7 +51,7 @@ void printLogo()
 }
 
 //Linux Kernel implementation
-void native_cpuid(unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx)
+void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {
         /* ecx is often an input as well as an output. */
         asm volatile("cpuid"
@@ -87,8 +87,8 @@ char *register_to_string(unsigned reg)
 //Returns the CPU vendor string, glaube ich
 char* get_cpu_vendor_string()
 {
-	unsigned eax, ebx, ecx, edx;
-	eax = 0;
+	uint32_t eax, ebx, ecx, edx;
+	eax = 0x0;
 	native_cpuid(&eax, &ebx, &ecx, &edx);
 	//EBX;EDX;ECX
 	char *output = "";
@@ -96,6 +96,36 @@ char* get_cpu_vendor_string()
 	strcat(output, register_to_string(edx));
 	strcat(output, register_to_string(ecx));
 
-	return (char*) output;
+	return output;
 
+}
+
+bool extended_cpuid_available()
+{
+	uint32_t eax, ebx, ecx, edx;
+	eax = 0x80000000;
+	native_cpuid(&eax, &ebx, &ecx, &edx);
+	if(eax == 0) {
+		return false;
+	} else {
+		return true;
+	}
+	return false;
+}
+
+bool is_bit_set(uint32_t val, int bit)
+{
+	if(val & (1 << bit)) {
+		return true;
+	} else {
+		return false;
+	}
+	return false;
+}
+
+void hang()
+{
+	clrscr(RED_ON_BLACK);
+	println_string("[SYS] Halting System.");
+	asm volatile("hlt");
 }

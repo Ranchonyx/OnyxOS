@@ -30,7 +30,7 @@ bin/sys.bin:            bin/bootloader/mbr.bin bin/kernel/kernel.bin
 	cat $^ > $@
 
 run:                    bin/sys.bin
-	qemu-system-x86_64 -enable-kvm -cpu host -soundhw pcspk -drive file=$<,format=raw,index=0,media=disk
+	qemu-system-x86_64 -enable-kvm -cpu max -audiodev pa,id=pa,server=unix:${XDG_RUNTIME_DIR}/pulse/native,out.stream-name=foobar,in.stream-name=foobar -device intel-hda -device hda-duplex,audiodev=pa,mixer=off -drive file=$<,format=raw,index=0,media=disk
 
 obj/%.o: source/%.c ${HEADERS}
 	gcc $(GCC_FLAGS) -c $< -o $@
