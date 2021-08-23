@@ -2,6 +2,7 @@
 #include "string.h"
 #include "ports.h"
 #include "util.h"
+#include "sys.h"
 
 void clrscr(const char color)
 {
@@ -27,6 +28,10 @@ size_t get_cursor()
 	out(VGA_CTRL_REG, VGA_OFFSET_LOW);
 	offset += in(VGA_DATA_REG);
 	return offset * 2;
+}
+
+size_t get_color(size_t offset) {
+	return ((unsigned char*) VIDMEM_ADDR)[offset];
 }
 
 void set_char_at(size_t offset, const char chr, const char color)
@@ -131,10 +136,10 @@ size_t move_offset_to_newline(size_t offset)
 
 int scroll_ln(size_t offset)
 {
-	memcpy(
-		(char *) (get_offset(0, 1) + VIDMEM_ADDR),
-		(char *) (get_offset(0, 0) + VIDMEM_ADDR),
-		COLS_MAX * (ROWS_MAX - 1) * 2
+	memmove(
+		(uint8_t *) (get_offset(0, 0) + VIDMEM_ADDR),
+		(uint8_t *) (get_offset(0, 1) + VIDMEM_ADDR),
+		(COLS_MAX * (ROWS_MAX - 1) * 2)
 	);
 
 	for(size_t col = 0; col < COLS_MAX; col++) {
@@ -153,12 +158,12 @@ void pixel(unsigned char* screen, size_t x, size_t y, size_t pixelwidth, int pit
 
 void color_test()
 {
+	const char d[2] = {(char)176, '\0'};
 	char color = 0x00;
 	char _color = 0xf0;
 	for(int i = 0; i < 256; i++) {
-		print_string_color("#", color+_color);
+		print_string_color(d, color+_color);
 		color++;
 		_color++;
-		//delaySeconds(1);
 	}
 }

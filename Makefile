@@ -18,7 +18,7 @@ BIN_DIR := bin/bootloader bin/kernel
 all: init run
 
 bin/kernel/kernel.bin:  obj/lib/asm/kentry.o ${OBJ_FILES}
-	ld -m elf_i386 -o $@ -Ttext 0x9000 $^ --oformat binary
+	ld -g -m elf_i386 -o $@ -Ttext 0x9000 $^ --oformat binary
 
 obj/lib/asm/kentry.o:   source/lib/asm/kentry.asm
 	nasm $(NASM_FLAGS) $< -f elf -o $@
@@ -30,10 +30,17 @@ bin/sys.bin:            bin/bootloader/mbr.bin bin/kernel/kernel.bin
 	cat $^ > $@
 
 run:                    bin/sys.bin
-	qemu-system-x86_64 -enable-kvm -cpu max -audiodev pa,id=pa,server=unix:${XDG_RUNTIME_DIR}/pulse/native,out.stream-name=foobar,in.stream-name=foobar -device intel-hda -device hda-duplex,audiodev=pa,mixer=off -drive file=$<,format=raw,index=0,media=disk
+	sudo qemu-system-x86_64 -s -enable-kvm -cpu host -drive file=$<,format=raw,index=0,media=disk
+
+kernel.elf: obj/lib/asm/kentry.o ${OBJ_FILES}
+	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x9000 $^
+
+debug: kernel.elf bin/sys.bin
+	sudo qemu-system-x86_64 -s -d guest_errors,int -enable-kvm -cpu host -drive file=bin/sys.bin,format=raw,index=0,media=disk
+	#x86_64-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 obj/%.o: source/%.c ${HEADERS}
-	gcc $(GCC_FLAGS) -c $< -o $@
+	gcc $(GCC_FLAGS) -c $< -o $@ -g
 
 obj/%.o: source/%.asm
 	nasm $(NASM_FLAGS) $< -f elf -o $@

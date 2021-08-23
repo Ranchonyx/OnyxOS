@@ -43,6 +43,7 @@ typedef union {
 void    clrscr(const char color);
 void    set_cursor(size_t offset);
 size_t  get_cursor();
+size_t get_color(size_t offset);
 void    set_char_at(size_t offset, const char chr, const char color);
 void    print_string_color(const char* str, const char color);
 void    print_string(const char *str);

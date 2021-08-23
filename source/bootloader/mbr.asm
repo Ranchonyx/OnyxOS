@@ -1,17 +1,15 @@
-;Bootloader entry point at 0x7c00
-global _start;
-
 ;16 Bit Real Mode
 [bits 16]
 ;Set Origin to 0x7c00
 [org  0x7c00]
 
-;Kernel Entry Point Offset is 0x9000 (See Makefile [ld task])
+;Kernel Entry Point Offset is 0x1000 (See Makefile [ld task])
 KOFFSET equ 0x9000
 
 ;Load 64 Sectors of Disk into RAM
-SECTORS_TO_LOAD equ 64
-
+SECTORS_TO_LOAD equ 128
+;Bootloader entry point at 0x7c00
+global _start
 _start:
 jmp loader_entry
 
@@ -55,17 +53,18 @@ call PrintString
 mov si, protmode_msg
 call PrintString
 
+; jmp $
 
-;Initialize Stack base at 0x9000, Initialize Stack Pointer at Base for now
-mov bp, 0x9000
+
+;Initialize Stack base at 0x10500, Initialize Stack Pointer at Base for now
+mov bp, 0x10500
 mov sp, bp
 
 ;Load Kernel
 call lkernel
 
 ;Switch to 32 Bit Protected Mode
-mov ax, 0x0e07
-int 0x10
+
 call sw32
 
 ;Hang
@@ -99,4 +98,4 @@ jmp $
 times 510 - ($-$$) db 0
 
 ;Magic number (boot signature) indicating this is a bootable sector
-dw 0aa55h
+dw 0xaa55
