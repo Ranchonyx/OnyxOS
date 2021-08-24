@@ -2,6 +2,7 @@
 #include "util.h"
 #include "sys_strings.h"
 #include "vga.h"
+#include "ports.h"
 //#define ALLOC_HEADER_SZ offsetof(alloc_node_t, block)
 
 //Linux Kernel implementation
@@ -91,6 +92,7 @@ bool extended_cpuid_available()
 
 void hang()
 {
+  set_cursor(0);
   println_string_color(SYS_HANG, RED_ON_BLACK);
 
   __asm__ volatile("hlt");
@@ -99,4 +101,18 @@ void hang()
 void restart_kernel()
 {
   __asm__ volatile("jmp 0x9000");
+}
+
+uint8_t __cmos__getMemory()
+{
+  unsigned short total;
+  unsigned char low, hi;
+
+  out(0x70, 0x30);
+  low = in(0x71);
+  out(0x70, 0x31);
+  hi = in(0x71);
+
+  total = low | hi << 8;
+  return total;
 }

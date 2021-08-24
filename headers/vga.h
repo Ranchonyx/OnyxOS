@@ -9,7 +9,9 @@
 #define VGA_OFFSET_LOW		0x0F
 #define VGA_OFFSET_HIGH		0x0E
 
-#define VIDMEM_ADDR		    0xb8000
+#define VIDMEM_ADDR		    0x00a0000
+//#define VIDMEM_ADDR		    0x00b8000
+#define VIDMEM_END        0x000bfff
 #define ROWS_MAX		      25
 #define COLS_MAX		      80
 
@@ -43,7 +45,7 @@ typedef union {
 void    clrscr(const char color);
 void    set_cursor(size_t offset);
 size_t  get_cursor();
-size_t get_color(size_t offset);
+size_t  get_color(size_t offset);
 void    set_char_at(size_t offset, const char chr, const char color);
 void    print_string_color(const char* str, const char color);
 void    print_string(const char *str);

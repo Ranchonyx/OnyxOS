@@ -7,7 +7,7 @@
 KOFFSET equ 0x9000
 
 ;Load 64 Sectors of Disk into RAM
-SECTORS_TO_LOAD equ 128
+SECTORS_TO_LOAD equ 64
 ;Bootloader entry point at 0x7c00
 global _start
 _start:

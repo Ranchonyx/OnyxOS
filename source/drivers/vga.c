@@ -3,6 +3,7 @@
 #include "ports.h"
 #include "util.h"
 #include "sys.h"
+#include "framebuffer.h"
 
 void clrscr(const char color)
 {

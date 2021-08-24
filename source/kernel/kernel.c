@@ -9,7 +9,7 @@ void prologue() {
 	clrscr(WHITE_ON_BLACK);
 	color_test();
 	if(extended_cpuid_available() == false) {
-		println_string_color("\nNO EXTENDED CPUID FUNCTIONS!\n", RED_ON_BLACK);
+		println_string_color("NO EXTENDED CPUID FUNCTIONS!\n", RED_ON_BLACK);
 		delaySeconds(3);
 	} else {
 		println_string_color("CPUID SUPPPORTS EXTENDED FUNCTIONS!\n", GREEN_ON_BLACK);
@@ -31,12 +31,7 @@ void prologue() {
 	println_string("Copyright (c) 2021 Omer Shamai, Yuri Khordal, Felix Janetzki");
 	println_string("Special thanks to Fast-Nop for continuous help to us assembly-lethargics!");
 }
-
 //Main kernel entry point
 void main() {
 		prologue();
-		for(int i = 10000; i > 0; i--) {
-			println_string_color("Hello there!", WHITE_ON_BLACK);
-			delaySeconds(1);
-		}
 }

@@ -58,3 +58,4 @@ test:
 clean:
 	$(RM) -r bin/*
 	$(RM) -r obj/*
+	$(RM) -r kernel.elf
