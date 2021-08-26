@@ -9,9 +9,7 @@
 #define VGA_OFFSET_LOW		0x0F
 #define VGA_OFFSET_HIGH		0x0E
 
-#define VIDMEM_ADDR		    0x00a0000
-//#define VIDMEM_ADDR		    0x00b8000
-#define VIDMEM_END        0x000bfff
+#define VIDMEM_ADDR		    0xB8000
 #define ROWS_MAX		      25
 #define COLS_MAX		      80
 
@@ -32,15 +30,6 @@
 #define WHITE_ON_BLACK		0x0f
 
 
-typedef union {
-  uint32_t rgba;
-  struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-    uint8_t alpha;
-  };
-} color;
 
 void    clrscr(const char color);
 void    set_cursor(size_t offset);
@@ -55,6 +44,5 @@ size_t  row_from_offset(size_t offset);
 size_t  get_offset(size_t col, size_t row);
 size_t  move_offset_to_newline(size_t offset);
 int     scroll_ln(size_t offset);
-void    pixel(unsigned char* screen, size_t x, size_t y, size_t pixelwidth, int pitch, color rgb);
 void    color_test();
 #endif /* end of include guard: VGA_H */

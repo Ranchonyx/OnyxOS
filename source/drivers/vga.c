@@ -3,7 +3,6 @@
 #include "ports.h"
 #include "util.h"
 #include "sys.h"
-#include "framebuffer.h"
 
 void clrscr(const char color)
 {
@@ -53,7 +52,7 @@ void print_string(const char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at(offset, str[i], ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
+		set_char_at(offset, str[i], WHITE_ON_BLACK/*((unsigned char*)VIDMEM_ADDR)[offset + 1]*/);
 		offset += 2;
 		}
 	i++;
@@ -148,13 +147,6 @@ int scroll_ln(size_t offset)
 	}
 
 	return offset - 2 * COLS_MAX;
-}
-
-void pixel(unsigned char* screen, size_t x, size_t y, size_t pixelwidth, int pitch, color rgb) {
-    size_t where = x*pixelwidth + y*pitch;
-    screen[where] = rgb.blue;                 // BLUE
-    screen[where + 1] = rgb.green;            // GREEN
-    screen[where + 2] = rgb.red;              // RED
 }
 
 void color_test()

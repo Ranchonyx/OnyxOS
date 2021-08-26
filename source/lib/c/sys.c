@@ -116,3 +116,26 @@ uint8_t __cmos__getMemory()
   total = low | hi << 8;
   return total;
 }
+
+int cmd(char* command)
+{
+  lower(command);
+  print_string_color("EXEC \"", TEAL_ON_BLACK);
+  print_string_color(command, TEAL_ON_BLACK);
+  println_string_color("\"", TEAL_ON_BLACK);
+
+  if(compare_string(command, "yah") == 0) {
+    println_string("YEET");
+    return 0;
+  } else if(compare_string(command, "krestart") == 0) {
+    println_string("Restarting kernel.");
+    delaySeconds(5);
+    command[0] = '\0';
+    restart_kernel();
+    return 0;
+  }
+
+  println_string_color("UNKNOWN COMMAND", TEAL_ON_BLACK);
+
+  return 1;
+}

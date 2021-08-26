@@ -8,7 +8,7 @@ sw32:
 	jmp CODE_SEG:init32
 
 [bits 32]
-	init32:
+init32:
 	mov ax, DATA_SEG
 	mov ds, ax
 	mov ss, ax

@@ -15,12 +15,15 @@ BIN_DIR := bin/bootloader bin/kernel
 
 .PHONY: all clean init
 
-all: init run
+all:	init run
 
-bin/kernel/kernel.bin:  obj/lib/asm/kentry.o ${OBJ_FILES}
+bin/kernel/kernel.bin:  obj/lib/asm/kentry.o obj/lib/asm/assembly_functions.o ${OBJ_FILES}
 	ld -g -m elf_i386 -o $@ -Ttext 0x9000 $^ --oformat binary
 
 obj/lib/asm/kentry.o:   source/lib/asm/kentry.asm
+	nasm $(NASM_FLAGS) $< -f elf -o $@
+
+obj/lib/asm/assembly_functions.asm: source/lib/asm/assembly_functions.asm
 	nasm $(NASM_FLAGS) $< -f elf -o $@
 
 bin/bootloader/mbr.bin: source/bootloader/mbr.asm
@@ -29,15 +32,15 @@ bin/bootloader/mbr.bin: source/bootloader/mbr.asm
 bin/sys.bin:            bin/bootloader/mbr.bin bin/kernel/kernel.bin
 	cat $^ > $@
 
-run:                    bin/sys.bin
+run:	bin/sys.bin
 	sudo qemu-system-x86_64 -s -enable-kvm -cpu host -drive file=$<,format=raw,index=0,media=disk
 
-kernel.elf: obj/lib/asm/kentry.o ${OBJ_FILES}
+kernel.elf: obj/lib/asm/kentry.o obj/lib/asm/assembly_functions.o ${OBJ_FILES}
 	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x9000 $^
 
 debug: kernel.elf bin/sys.bin
 	sudo qemu-system-x86_64 -s -d guest_errors,int -enable-kvm -cpu host -drive file=bin/sys.bin,format=raw,index=0,media=disk
-	#x86_64-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
+#	x86_64-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 obj/%.o: source/%.c ${HEADERS}
 	gcc $(GCC_FLAGS) -c $< -o $@ -g

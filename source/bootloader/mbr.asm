@@ -73,7 +73,7 @@ jmp $
 %include "disk.asm"
 %include "gdt.asm"
 %include "sw32.asm"
-%include "print32.asm"
+;%include "print32.asm"
 
 [bits 16]
 

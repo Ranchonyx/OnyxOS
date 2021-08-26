@@ -1,5 +1,8 @@
+[map all myfile.map]
+
 gdt_null:
-  dq 0
+  dd 0x0
+  dd 0x0
 
 gdt_code:
   dw 0xffff
