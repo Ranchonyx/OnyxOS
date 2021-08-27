@@ -19,14 +19,14 @@
 
 
 void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t * edx);
-void hang();
+void hang(char *cause);
 void restart_kernel();
 //void malloc_addblock(void *addr, size_t size);
 uint8_t __cmos__getMemory();
 void *memcpy(void* dest, const void* src, size_t n);
 void *memmove (void* dest, const void* src, size_t n);
 char *register_to_string(unsigned reg);
-char *get_cpu_vendor_string();
+void get_cpu_vendor_string(char dest[]);
 bool extended_cpuid_available();
 int  cmd(char* command);
 

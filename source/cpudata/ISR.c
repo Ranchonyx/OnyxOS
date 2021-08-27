@@ -3,6 +3,7 @@
 #include "ports.h"
 #include "vga.h"
 #include "util.h"
+#include "sys.h"
 
 isr_t interrupt_handlers[256];
 
@@ -43,16 +44,16 @@ void isr_install()
 
   //Remap PIC to not use BIOS defaults
 
-  out(0x20, 0x11);
-  out(0xA0, 0x11);
-  out(0x21, 0x20);
-  out(0xA1, 0x28);
-  out(0x21, 0x04);
-  out(0xA1, 0x02);
-  out(0x21, 0x01);
-  out(0xA1, 0x01);
-  out(0x21, 0x00);
-  out(0xA1, 0x00);
+  outb(0x20, 0x11);
+  outb(0xA0, 0x11);
+  outb(0x21, 0x20);
+  outb(0xA1, 0x28);
+  outb(0x21, 0x04);
+  outb(0xA1, 0x02);
+  outb(0x21, 0x01);
+  outb(0xA1, 0x01);
+  outb(0x21, 0x00);
+  outb(0xA1, 0x00);
 
   //install irqs
 
@@ -79,11 +80,7 @@ void isr_install()
 
 void isr_handler(registers_t *regs)
 {
-  print_string_color("INT", TEAL_ON_BLACK);
-  char* s;
-  itos(regs->int_no, s);
-  println_string_color(exception_messages[regs->int_no], TEAL_ON_BLACK);
-  println_string("");
+  hang(exception_messages[regs->int_no]);
 }
 
 void register_interrupt_handler(uint8_t n, isr_t handler)
@@ -99,7 +96,7 @@ void irq_handler(registers_t *regs)
   }
 
   if(regs->int_no >= 40) {
-    out(0xA0, 0x20);
+    outb(0xA0, 0x20);
   }
-  out(0x20, 0x20);
+  outb(0x20, 0x20);
 }

@@ -12,6 +12,7 @@
 #define VIDMEM_ADDR		    0xB8000
 #define ROWS_MAX		      25
 #define COLS_MAX		      80
+#define VIDMEM_SIZE      (((ROWS_MAX * COLS_MAX) * 2) - 1)
 
 #define BLUE_ON_BLACK     0x01
 #define GREEN_ON_BLACK    0x02
@@ -40,6 +41,7 @@ void    print_string_color(const char* str, const char color);
 void    print_string(const char *str);
 void    println_string(const char *str);
 void    println_string_color(const char *str, const char color);
+void    print_backspace();
 size_t  row_from_offset(size_t offset);
 size_t  get_offset(size_t col, size_t row);
 size_t  move_offset_to_newline(size_t offset);

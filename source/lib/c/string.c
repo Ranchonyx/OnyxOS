@@ -33,6 +33,17 @@ int compare_string(char s1[], char s2[]) {
     return s1[i] - s2[i];
 }
 
+int backspace(char s[])
+{
+  size_t len = strlen(s);
+  if(len > 0) {
+    s[len - 1] = '\0';
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
 //From linux kernel
 char* strcat(char* dest, char* src)
 {

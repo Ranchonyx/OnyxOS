@@ -15,18 +15,18 @@ void clrscr(const char color)
 void set_cursor(size_t offset)
 {
 	offset /= 2;
-	out(VGA_CTRL_REG, VGA_OFFSET_HIGH);
-	out(VGA_DATA_REG, (unsigned char) (offset >> 8));
-	out(VGA_CTRL_REG, VGA_OFFSET_LOW);
-	out(VGA_DATA_REG, (unsigned char) (offset & 0xFF));
+	outb(VGA_CTRL_REG, VGA_OFFSET_HIGH);
+	outb(VGA_DATA_REG, (unsigned char) (offset >> 8));
+	outb(VGA_CTRL_REG, VGA_OFFSET_LOW);
+	outb(VGA_DATA_REG, (unsigned char) (offset & 0xFF));
 }
 
 size_t get_cursor()
 {
-	out(VGA_CTRL_REG, VGA_OFFSET_HIGH);
-	size_t offset = in(VGA_DATA_REG) << 8;
-	out(VGA_CTRL_REG, VGA_OFFSET_LOW);
-	offset += in(VGA_DATA_REG);
+	outb(VGA_CTRL_REG, VGA_OFFSET_HIGH);
+	size_t offset = inb(VGA_DATA_REG) << 8;
+	outb(VGA_CTRL_REG, VGA_OFFSET_LOW);
+	offset += inb(VGA_DATA_REG);
 	return offset * 2;
 }
 
@@ -117,6 +117,12 @@ void println_string_color(const char *str, const char color)
 	}
 	offset = move_offset_to_newline(offset);
 	set_cursor(offset);
+}
+
+void print_backspace()
+{
+	set_cursor(get_cursor() - 2);
+	set_char_at(get_cursor(), ' ', get_color(get_cursor() + 1));
 }
 
 size_t row_from_offset(size_t offset)

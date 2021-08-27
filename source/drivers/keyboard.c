@@ -23,13 +23,15 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
 
 static void keyboard_callback(registers_t *regs)
 {
-  uint8_t scancode = in(0x60);
+  uint8_t scancode = inb(0x60);
 
     if(scancode > 57) {
       return;
     }
     if(scancode == 0x0E) {
-      //print backspace char to keybuf
+      if(backspace(buffer) == 0) {
+        print_backspace();
+      }
     } else if(scancode == 0x1C) {
       //Enter
       println_string("");
