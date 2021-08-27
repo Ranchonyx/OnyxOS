@@ -11,6 +11,9 @@ SECTORS_TO_LOAD equ 128
 ;Bootloader entry point at 0x7c00
 global _start
 _start:
+; mov ah, 0x00
+; mov al, 12h
+; int 0x10
 jmp loader_entry
 
 ;Define Hardcoded Strings

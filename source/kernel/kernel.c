@@ -5,8 +5,9 @@
 #include "ISR.h"
 #include "keyboard.h"
 #include "stdbool.h"
+#include "textmode_gfx.h"
 
-bool fastboot = true;
+bool fastboot = false;
 
 void prologue() {
 
@@ -71,23 +72,8 @@ void prologue() {
 
 //Main kernel entry point
 void main() {
+	// unsigned char* location = (unsigned char*)0xA0000 + 320 * 10 + 10;
+	// *location = GREEN_ON_BLACK;
 		prologue();
-			unsigned char fb[VIDMEM_SIZE];
-			unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
-
-			vidmem[0] = '#';
-			vidmem[1] = 0xf1;
-			vidmem[VIDMEM_SIZE-1] = '#';
-			vidmem[VIDMEM_SIZE] = 0xf1;
-
-			memcpy(fb, vidmem, VIDMEM_SIZE);
-
-			int x = 5;
-			int y = 2;
-			fb[(x*2) + (COLS_MAX * y * 2)] = 'X';
-			fb[(x*2) + (COLS_MAX * y * 2) + 1] = 0xf1;
-
-
-			memcpy(vidmem, fb, VIDMEM_SIZE);
-
+		line(0, 10, 15, 0, (char)178, YELLOW_ON_BLACK);
 }

@@ -9,6 +9,7 @@
 #define VGA_OFFSET_LOW		0x0F
 #define VGA_OFFSET_HIGH		0x0E
 
+//#define VIDMEM_ADDR       0xA0000
 #define VIDMEM_ADDR		    0xB8000
 #define ROWS_MAX		      25
 #define COLS_MAX		      80
@@ -30,21 +31,27 @@
 #define YELLOW_ON_BLACK   0x0e
 #define WHITE_ON_BLACK		0x0f
 
+static unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
+
+
 
 
 void    clrscr(const char color);
 void    set_cursor(size_t offset);
-size_t  get_cursor();
-size_t  get_color(size_t offset);
 void    set_char_at(size_t offset, const char chr, const char color);
+void    set_char_xy(size_t x, size_t y, const char chr, const char color);
 void    print_string_color(const char* str, const char color);
 void    print_string(const char *str);
 void    println_string(const char *str);
 void    println_string_color(const char *str, const char color);
 void    print_backspace();
+void    color_test();
+
+size_t  get_color(size_t offset);
 size_t  row_from_offset(size_t offset);
 size_t  get_offset(size_t col, size_t row);
 size_t  move_offset_to_newline(size_t offset);
+size_t  get_cursor();
+
 int     scroll_ln(size_t offset);
-void    color_test();
 #endif /* end of include guard: VGA_H */

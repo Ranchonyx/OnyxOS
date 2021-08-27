@@ -4,6 +4,7 @@
 #include "util.h"
 #include "sys.h"
 
+
 void clrscr(const char color)
 {
 	for(size_t i = 0; i < COLS_MAX * ROWS_MAX; ++i) {
@@ -36,10 +37,17 @@ size_t get_color(size_t offset) {
 
 void set_char_at(size_t offset, const char chr, const char color)
 {
-	unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
 	vidmem[offset] = chr;
 	vidmem[offset + 1] = color;
 }
+
+void set_char_xy(size_t x, size_t y, const char chr, const char color)
+{
+	vidmem[(x*2) + (COLS_MAX * y * 2)] = chr;
+	vidmem[(x*2) + (COLS_MAX * y * 2) + 1] = color;
+}
+
+
 
 void print_string(const char *str)
 {
@@ -52,7 +60,7 @@ void print_string(const char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at(offset, str[i], WHITE_ON_BLACK/*((unsigned char*)VIDMEM_ADDR)[offset + 1]*/);
+		set_char_at(offset, str[i], get_color(get_cursor()+1));
 		offset += 2;
 		}
 	i++;
@@ -90,7 +98,7 @@ void println_string(const char *str)
 		if(str[i] == '\n') {
 			offset = move_offset_to_newline(offset);
 		} else {
-		set_char_at(offset, str[i], ((unsigned char*)VIDMEM_ADDR)[offset + 1]);
+		set_char_at(offset, str[i], get_color(get_cursor()+1));
 		offset += 2;
 		}
 	i++;

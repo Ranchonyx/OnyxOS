@@ -73,3 +73,9 @@ bool is_bit_set(uint32_t val, int bit)
 	}
 	return false;
 }
+
+int abs(int x)
+{
+	int t = (unsigned int) x >> 31;
+	return (- t) ^ (x - t);
+}
