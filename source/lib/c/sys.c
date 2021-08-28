@@ -3,7 +3,7 @@
 #include "sys_strings.h"
 #include "vga.h"
 #include "ports.h"
-//#define ALLOC_HEADER_SZ offsetof(alloc_node_t, block)
+#include "dmm.h"
 
 //Linux Kernel implementation
 inline void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
@@ -145,6 +145,12 @@ int cmd(char* command)
     return 0;
   } else if(compare_string(command, "help") == 0) {
     println_string("shutdown (qemu)\nkrestart\ncpuvendor\nclrscr\nhelp");
+    return 0;
+  } else if(compare_string(command, "dynmem") == 0) {
+    print_dynmem();
+    return 0;
+  } else if(compare_string(command, "reboot") == 0) {
+    outb(0x64, 0xFE);
     return 0;
   }
 
