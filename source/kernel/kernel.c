@@ -7,6 +7,8 @@
 #include "stdbool.h"
 #include "dmm.h"
 #include "string.h"
+#include "speaker.h"
+#include "ports.h"
 
 unsigned char cpustring[16];
 
@@ -60,6 +62,7 @@ void prologue() {
 		println_string_color("                        _/                                      ", YELLOW_ON_BLACK);
 		println_string_color("                   _/_/                                         ", YELLOW_ON_BLACK);
 
+		beep(2415, 1);
 
 		print_string("OnyxOS (kernel_version x86_64-32_bit-0.1.1) Running on ");
 		println_string_color(cpustring, LCYAN_ON_BLACK);
@@ -84,5 +87,4 @@ void prologue() {
 //Main kernel entry point
 void main() {
 		prologue();
-
 }

@@ -6,6 +6,7 @@
 #include "ports.h"
 #include "dmm.h"
 #include "util.h"
+#include "speaker.h"
 
 //Linux Kernel implementation
 inline void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
