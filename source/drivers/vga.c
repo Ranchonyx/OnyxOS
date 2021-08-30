@@ -4,11 +4,10 @@
 #include "util.h"
 #include "sys.h"
 
-
-void clrscr(const char color)
+void clrscr()
 {
 	for(size_t i = 0; i < COLS_MAX * ROWS_MAX; ++i) {
-		set_char_at(i * 2, ' ', color);
+		set_char_at(i * 2, ' ', get_color(VIDMEM_SIZE));
 	}
 	set_cursor(get_offset(0, 0));
 }

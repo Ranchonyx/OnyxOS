@@ -1,9 +1,11 @@
+#include "timer.h"
 #include "sys.h"
 #include "util.h"
 #include "sys_strings.h"
 #include "vga.h"
 #include "ports.h"
 #include "dmm.h"
+#include "util.h"
 
 //Linux Kernel implementation
 inline void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
@@ -99,6 +101,7 @@ void hang(char *cause)
 //Some really unhealthy shit right here
 void restart_kernel()
 {
+  println_string_color("KRESTART NOW", YELLOW_ON_BLACK);
   __asm__ volatile("jmp 0x9000");
 }
 
@@ -117,6 +120,14 @@ uint8_t __cmos__getMemory()
   return total;
 }
 
+void delay(uint32_t millis) {
+	uint32_t tgt = get_ticks()+(millis / 10);;
+	while(get_ticks() <= tgt) {
+
+	}
+	return;
+}
+
 //Run a command defined below
 int cmd(char* command)
 {
@@ -126,17 +137,11 @@ int cmd(char* command)
   println_string_color("\"", TEAL_ON_BLACK);
 
 
-  if(compare_string(command, "krestart") == 0) {
-    println_string("Restarting kernel.");
-    delaySeconds(5);
-    command[0] = '\0';
-    restart_kernel();
-    return 0;
-  } else if(compare_string(command, "shutdown") == 0) {
+  if(compare_string(command, "shutdown") == 0) {
     outw(0x604, 0x2000);
     return 0;
   } else if(compare_string(command, "cpuvendor") == 0) {
-    char s[16];
+    unsigned char s[16];
     get_cpu_vendor_string(s);
     println_string(s);
     return 0;
@@ -144,7 +149,7 @@ int cmd(char* command)
     clrscr(WHITE_ON_BLACK);
     return 0;
   } else if(compare_string(command, "help") == 0) {
-    println_string("shutdown (qemu)\nkrestart\ncpuvendor\nclrscr\nhelp");
+    println_string("shutdown (qemu)\nreboot\ncpuvendor\nclrscr\nhelp\ndynmen\nticks");
     return 0;
   } else if(compare_string(command, "dynmem") == 0) {
     print_dynmem();
@@ -152,9 +157,13 @@ int cmd(char* command)
   } else if(compare_string(command, "reboot") == 0) {
     outb(0x64, 0xFE);
     return 0;
+  } else if(compare_string(command, "ticks") == 0) {
+    uint32_t a = get_ticks();
+    char buf[32];
+    itos(a, buf);
+    println_string(buf);
+    return 0;
   }
-
-  println_string_color("UNKNOWN COMMAND", TEAL_ON_BLACK);
 
   return 1;
 }

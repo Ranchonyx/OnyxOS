@@ -36,7 +36,7 @@ static unsigned char *vidmem = (unsigned char *) VIDMEM_ADDR;
 
 
 
-void    clrscr(const char color);
+void    clrscr();
 void    set_cursor(size_t offset);
 void    set_char_at(size_t offset, const char chr, const char color);
 void    set_char_xy(size_t x, size_t y, const char chr, const char color);

@@ -3,6 +3,7 @@
 #include "stddef.h"
 #include "stdint.h"
 #include "vga.h"
+#include "timer.h"
 
 void reverse(char s[])
 {
@@ -47,7 +48,6 @@ void map_field_to_matrix(unsigned char src[], size_t rows, size_t cols, unsigned
 void map_matrix_to_field(unsigned char dest[], size_t rows, size_t cols, unsigned char src[rows][cols])
 {
 	for(int i = 0; i < rows; i++) {
-		int row = 0;
 		for(int j = 0; i < cols; j++) {
 			//DEBUG
 			dest[i * cols + j] = src[i][j];
@@ -56,13 +56,18 @@ void map_matrix_to_field(unsigned char dest[], size_t rows, size_t cols, unsigne
 }
 
 //Literally Fast-Nop's C incarnation
-void delaySeconds(int s)
-{
-	long time = (100000000 * s) / 2;
-	for(volatile int i = 0; i < time; i++) {
-		__asm volatile ("nop" : : : "memory");
-	}
-}
+// void delaySeconds(int s)
+// {
+// 	long time = (100000000 * s) / 2;
+// 	for(volatile int i = 0; i < time; i++) {
+// 		__asm volatile ("nop" : : : "memory");
+// 	}
+// }
+
+//New delay implementation
+//For some reason doesnt work everywhere i dunno bro
+//For some reason doesnt work everywhere i dunno bro
+
 
 bool is_bit_set(uint32_t val, int bit)
 {

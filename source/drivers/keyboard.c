@@ -35,7 +35,14 @@ static void keyboard_callback(registers_t *regs)
     } else if(scancode == 0x1C) {
       //Enter
       println_string("");
-      cmd(buffer);
+      int retcode = cmd(buffer);
+      char buf[4];
+      itos(retcode, buf);
+
+      if(retcode != 0) {
+        print_string("Process returned an error: ");
+        println_string_color(buf, LRED_ON_BLACK);
+      }
       buffer[0] = '\0';
       print_string_color("]> ", TEAL_ON_BLACK);
     } else {

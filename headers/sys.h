@@ -29,5 +29,6 @@ char *register_to_string(unsigned reg);
 void get_cpu_vendor_string(char dest[]);
 bool extended_cpuid_available();
 int  cmd(char* command);
+void delay(uint32_t millis);
 
 #endif /* end of include guard: SYS_H */

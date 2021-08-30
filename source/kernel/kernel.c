@@ -1,60 +1,56 @@
+#include "timer.h"
+#include "sys.h"
 #include "vga.h"
 #include "util.h"
-#include "sys.h"
 #include "ISR.h"
 #include "keyboard.h"
 #include "stdbool.h"
 #include "dmm.h"
 #include "string.h"
 
-bool fastboot = false;
-
-
+unsigned char cpustring[16];
 
 void prologue() {
 
-	if(!fastboot) {
-		delaySeconds(5);
-		char cpustring[12];
-		get_cpu_vendor_string(cpustring);
+	clrscr();
 
-		//#region
-		clrscr(WHITE_ON_BLACK);
-		color_test();
-		print_string("\nVGA : ");
-		delaySeconds(1);
-		println_string_color("OK", EMERALD_ON_BLACK);
-		if(extended_cpuid_available() == false) {
-			println_string_color("CPUID: FATAL ERR", RED_ON_BLACK);
-			delaySeconds(3);
-			hang("NO CPUID");
-		} else {
-			print_string("CPUID : ");
-			delaySeconds(1);
-			println_string_color("OK", EMERALD_ON_BLACK);
-		}
-		print_string("ISRs : ");
-		isr_install();
-		delaySeconds(1);
-		println_string_color("OK", EMERALD_ON_BLACK);
+	print_string("ISRs : ");
+	isr_install();
+	println_string_color("OK", EMERALD_ON_BLACK);
 
-		print_string("EXINT : ");
-		__asm__ volatile("sti");
-		delaySeconds(1);
-		println_string_color("OK", EMERALD_ON_BLACK);
+	print_string("EXINT : ");
+	__asm__ volatile("sti");
+	println_string_color("OK", EMERALD_ON_BLACK);
 
-		print_string("DYNMEM (alloc, malloc, free) : ");
-		init_dmm();
-		delaySeconds(1);
-		println_string_color("OK", EMERALD_ON_BLACK);
+	print_string("TIMER (IRQ0) : ");
+	init_timer(1);
+	delay(500);
+	println_string_color("OK", EMERALD_ON_BLACK);
 
-		print_string("KEYBOARD (IRQ1) : ");
-		init_keyboard();
-		delaySeconds(1);
-		println_string_color("OK", EMERALD_ON_BLACK);
+	print_string("KEYBOARD (IRQ1) : ");
+	init_keyboard();
+	delay(500);
+	println_string_color("OK", EMERALD_ON_BLACK);
 
-		delaySeconds(2);
-		clrscr(WHITE_ON_BLACK);
+	print_string("DYNMEM (alloc, malloc, free) : ");
+	init_dmm();
+	delay(500);
+	println_string_color("OK", EMERALD_ON_BLACK);
+
+	get_cpu_vendor_string(cpustring);
+
+	if(extended_cpuid_available() == false) {
+		println_string_color("CPUID: FATAL ERR", RED_ON_BLACK);
+		delay(3000);
+		hang("NO CPUID");
+	} else {
+		print_string("CPUID : ");
+		delay(500);
+		println_string_color("OK", EMERALD_ON_BLACK);
+	}
+
+		delay(1000);
+		clrscr();
 
 		println_string_color("     _/_/                                    _/_/      _/_/_/   ", YELLOW_ON_BLACK);
 		println_string_color("  _/    _/  _/_/_/    _/    _/  _/    _/  _/    _/  _/          ", YELLOW_ON_BLACK);
@@ -63,7 +59,6 @@ void prologue() {
 		println_string_color(" _/_/    _/    _/    _/_/_/  _/    _/    _/_/    _/_/_/         ", YELLOW_ON_BLACK);
 		println_string_color("                        _/                                      ", YELLOW_ON_BLACK);
 		println_string_color("                   _/_/                                         ", YELLOW_ON_BLACK);
-		//#endregion
 
 
 		print_string("OnyxOS (kernel_version x86_64-32_bit-0.1.1) Running on ");
@@ -75,16 +70,19 @@ void prologue() {
 		append(d, 'B');
 		append(e, 'B');
 		print_string("Total dynamic memory: ");
-		println_string_color(d, LCYAN_ON_BLACK);
+		print_string_color(d, LCYAN_ON_BLACK);
+		println_string_color(" (-16B)", LCYAN_ON_BLACK);
 		print_string("Dynamic node size: ");
 		println_string_color(e, LCYAN_ON_BLACK);
 		println_string("Copyright (c) 2021 Yuri Khordal, Felix Janetzki");
+		print_string_color("]> ", LCYAN_ON_BLACK);
+
 	}
 
-	print_string_color("]> ", LCYAN_ON_BLACK);
-}
+
 
 //Main kernel entry point
 void main() {
 		prologue();
+
 }
