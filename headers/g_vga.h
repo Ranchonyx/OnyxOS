@@ -25,5 +25,6 @@ void g_rect(int x0, int y0, int x1, int y1, uint16_t vga_color);
 void g_fill_rect(int x0, int y0, int x1, int y1, uint16_t vga_color);
 void g_poly(ipoint_t* points, size_t count, uint16_t vga_color);
 void g_line(int x0, int y0, int x1, int y1, uint16_t vga_color);
+void g_circle(int cx, int cy, int r, uint16_t vga_color);
 
 #endif /* end of include guard: G_VGA_H */

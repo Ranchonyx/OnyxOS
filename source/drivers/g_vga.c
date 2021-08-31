@@ -82,3 +82,41 @@ void g_line(int x0, int y0, int x1, int y1, uint16_t vga_color)
     }
   }
 }
+
+void g_circle(int cx, int cy, int r, uint16_t vga_color)
+{
+  int x = 0;
+  int y = r;
+  int d = 3 - 2 * r;
+
+  g_set_pixel(cx+x, cy+y, vga_color);
+	g_set_pixel(cx-x, cy+y, vga_color);
+	g_set_pixel(cx+x, cy-y, vga_color);
+	g_set_pixel(cx-x, cy-y, vga_color);
+	g_set_pixel(cx+y, cy+x, vga_color);
+	g_set_pixel(cx-y, cy+x, vga_color);
+	g_set_pixel(cx+y, cy-x, vga_color);
+	g_set_pixel(cx-y, cy-x, vga_color);
+
+  while(y >= x)
+  {
+    x++;
+
+    if(d > 0) {
+      y--;
+      d = d + 4 * (x-y) + 10;
+    } else {
+      d = d + 4 * x + 6;
+      g_set_pixel(cx+x, cy+y, vga_color);
+      g_set_pixel(cx-x, cy+y, vga_color);
+      g_set_pixel(cx+x, cy-y, vga_color);
+      g_set_pixel(cx-x, cy-y, vga_color);
+      g_set_pixel(cx+y, cy+x, vga_color);
+      g_set_pixel(cx-y, cy+x, vga_color);
+      g_set_pixel(cx+y, cy-x, vga_color);
+      g_set_pixel(cx-y, cy-x, vga_color);
+
+    }
+  }
+
+}

@@ -98,7 +98,7 @@ void main(void)
 			{10, 10},
 			{30,  5},
 			{50, 15},
-			{20, 40},
+			{20, 70},
 			{ 5, 30},
 		};
 
@@ -106,6 +106,7 @@ void main(void)
 		g_poly(points, 5, color);
 		g_rect(70, 20, 90, 70, color);
 		g_fill_rect(100, 20, 120, 70, color);
+		g_line(100, 100, 200, 130, color);
 		// for (size_t i = 100; i < 150; i+=5) {
 		// 	g_rect(i, i, 150-i, 150-i, color);
 		// }
