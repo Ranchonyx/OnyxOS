@@ -84,3 +84,28 @@ int abs(int x)
 	int t = (unsigned int) x >> 31;
 	return (- t) ^ (x - t);
 }
+
+double pow(double base, double exponent)
+{
+	double r = 1;
+
+	for(exponent; exponent > 0; exponent--) {
+		r *= base;
+	}
+
+	return r;
+}
+
+double sqrt(double x)
+{
+	double r = x;
+
+	__asm__ volatile("fsqrt" : "+t"(r));
+
+	// double z = 1.0;
+	// for(int i = 1; i <= 10; i++) {
+	// 	z -= (z*z - x) / (2*z);
+	// }
+	// return z;
+	return r;
+}

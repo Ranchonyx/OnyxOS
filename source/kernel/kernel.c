@@ -9,6 +9,9 @@
 #include "string.h"
 #include "speaker.h"
 #include "ports.h"
+#include "g_vga.h"
+#include "stdint.h"
+#include "math.h"
 
 unsigned char cpustring[16];
 
@@ -88,5 +91,23 @@ void prologue()
 //Main kernel entry point
 void main(void)
 {
-		prologue();
+		//prologue();
+		g_clrscr();
+		uint16_t color = (0x0b+0x30);
+		ipoint_t points[5] = {
+			{10, 10},
+			{30,  5},
+			{50, 15},
+			{20, 40},
+			{ 5, 30},
+		};
+
+
+		g_poly(points, 5, color);
+		g_rect(70, 20, 90, 70, color);
+		g_fill_rect(100, 20, 120, 70, color);
+		// for (size_t i = 100; i < 150; i+=5) {
+		// 	g_rect(i, i, 150-i, 150-i, color);
+		// }
+
 }
