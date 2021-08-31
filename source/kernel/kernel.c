@@ -12,7 +12,8 @@
 
 unsigned char cpustring[16];
 
-void prologue() {
+void prologue()
+{
 
 	clrscr();
 
@@ -66,8 +67,8 @@ void prologue() {
 
 		print_string("OnyxOS (kernel_version x86_64-32_bit-0.1.1) Running on ");
 		println_string_color(cpustring, LCYAN_ON_BLACK);
-		char d[256];
-		char e[256];
+		char *d = (char*) malloc(sizeof(char)*16);
+		char *e = (char*) malloc(sizeof(char)*16);
 		itos(DYNMEM_SZ, d);
 		itos(sizeof(dynmem_node_t), e);
 		append(d, 'B');
@@ -85,6 +86,7 @@ void prologue() {
 
 
 //Main kernel entry point
-void main() {
+void main(void)
+{
 		prologue();
 }

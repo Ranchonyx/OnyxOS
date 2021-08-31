@@ -7,7 +7,7 @@
 //Uses doubly-linked-list
 
 #define MEMORY_KB       1024
-#define DYNMEM_SZ       (4 * MEMORY_KB)
+#define DYNMEM_SZ       (32 * MEMORY_KB)
 #define DYNMEM_NODE_SZ  sizeof(dynmem_node_t)
 
 

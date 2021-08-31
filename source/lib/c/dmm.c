@@ -70,7 +70,7 @@ void free(void *p)
     return;
   }
 
-  dynmem_node_t *current_mem_node = (dynmem_node_t*) ((uint8_t*) p - DYNMEM_SZ);
+  dynmem_node_t *current_mem_node = (dynmem_node_t*) ((uint8_t*) p - DYNMEM_NODE_SZ);
 
   if(current_mem_node == XNULL) {
     return;
@@ -126,14 +126,14 @@ void print_dynmem_node(dynmem_node_t *node)
 {
   char s[256];
   itos(node->sz, s);
-  print_string_color("{size = ", LCYAN_ON_BLACK);
+  print_string_color("[NODE{size = ", LCYAN_ON_BLACK);
   print_string_color(s, LCYAN_ON_BLACK);
 
   char u[256];
   itos(node->used, u);
   print_string_color("; used = ", LCYAN_ON_BLACK);
   print_string_color(u, LCYAN_ON_BLACK);
-  print_string_color("}; ", LCYAN_ON_BLACK);
+  print_string_color("}]", LCYAN_ON_BLACK);
 }
 
 void print_dynmem()
@@ -144,5 +144,5 @@ void print_dynmem()
     print_dynmem_node(current);
     current = current->next;
   }
-  print_string_color("]", LCYAN_ON_BLACK);
+  print_string_color("]\n", LCYAN_ON_BLACK);
 }
