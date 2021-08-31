@@ -9,6 +9,7 @@
 #include "string.h"
 #include "speaker.h"
 #include "ports.h"
+#include "textmode_gfx.h"
 
 unsigned char cpustring[16];
 
@@ -52,7 +53,7 @@ void prologue()
 		println_string_color("OK", EMERALD_ON_BLACK);
 	}
 
-		delay(1000);
+		delay(100);
 		clrscr();
 
 		println_string_color("     _/_/                                    _/_/      _/_/_/   ", YELLOW_ON_BLACK);

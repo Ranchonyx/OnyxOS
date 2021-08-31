@@ -39,7 +39,7 @@ kernel.elf: obj/lib/asm/kentry.o obj/lib/asm/assembly_functions.o ${OBJ_FILES}
 	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x9000 $^
 
 debug: kernel.elf bin/sys.bin
-	sudo qemu-system-x86_64 -s -d guest_errors,int -enable-kvm -cpu host -drive file=bin/sys.bin,format=raw,index=0,media=disk
+	sudo qemu-system-x86_64 -s -d guest_errors,int -enable-kvm -cpu host -soundhw pcspk -drive file=bin/sys.bin,format=raw,index=0,media=disk
 #	x86_64-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 obj/%.o: source/%.c ${HEADERS}
