@@ -1,4 +1,5 @@
 #include "string.h"
+#include "dmm.h"
 
 
 size_t strlen(const char* str)
@@ -54,4 +55,35 @@ while (*dest)
 while (*dest++ = *src++)
   ;
 return rdest;
+}
+
+char* strtok(char* string, const char* delimiter)
+{
+  static char* buffer;
+  if(string != XNULL)  {
+    buffer = string;
+  }
+
+  if(buffer[0] == '\0') {
+    return XNULL;
+  }
+
+  char* result = buffer, *b;
+  const char *d;
+
+for(b = buffer; *b != '\0'; b++) {
+  for(d = delimiter; *d != '\0'; d++) {
+    if(*b == *d) {
+      *b = '\0';
+      buffer = b+1;
+
+      if(b == result) {
+        result++;
+        continue;
+      }
+      return result;
+    }
+  }
+}
+return result;
 }

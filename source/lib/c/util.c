@@ -102,10 +102,24 @@ double sqrt(double x)
 
 	__asm__ volatile("fsqrt" : "+t"(r));
 
-	// double z = 1.0;
-	// for(int i = 1; i <= 10; i++) {
-	// 	z -= (z*z - x) / (2*z);
-	// }
-	// return z;
 	return r;
+}
+
+double sin(double x)
+{
+	double r = x;
+
+	__asm__ volatile("fsin" : "+t"(r));
+
+	return r;
+}
+
+double cos(double x)
+{
+	return sin(1.5708 + x);
+}
+
+double tan(double x)
+{
+	return sin(x)/sin(1.5708 + x);
 }

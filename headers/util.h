@@ -13,5 +13,8 @@ bool    is_bit_set(uint32_t val, int bit);
 int     abs(int x);
 double  pow(double base, double exponent);
 double  sqrt(double x);
+double  sin(double x);
+double  cos(double x);
+double  tan(double x);
 
 #endif /* end of include guard: UTIL_H */

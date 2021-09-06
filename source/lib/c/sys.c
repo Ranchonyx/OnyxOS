@@ -3,6 +3,7 @@
 #include "util.h"
 #include "sys_strings.h"
 #include "vga.h"
+#include "g_vga.h"
 #include "ports.h"
 #include "dmm.h"
 #include "util.h"
@@ -92,10 +93,13 @@ bool extended_cpuid_available()
 
 void hang(char *cause)
 {
-  set_cursor(COLS_MAX-(strlen(cause) + strlen(SYS_HANG)));
-  print_string_color(SYS_HANG, RED_ON_BLACK);
-  println_string_color(cause, RED_ON_BLACK);
-  set_cursor(0);
+  // set_cursor(COLS_MAX-(strlen(cause) + strlen(SYS_HANG)));
+  _cursor.y = 0;
+  _cursor.x = (RES_HORIZONTAL-(strlen(cause) + strlen(SYS_HANG)));
+  g_print_string(SYS_HANG, 0x4, 0x0);
+  g_print_string(cause, 0x4, 0x0);
+  _cursor.x = 0;
+  _cursor.y = 0;
   __asm__ volatile("cli; hlt");
 }
 
@@ -133,9 +137,9 @@ void delay(uint32_t millis) {
 int cmd(char* command)
 {
   lower(command);
-  print_string_color("EXEC \"", TEAL_ON_BLACK);
-  print_string_color(command, TEAL_ON_BLACK);
-  println_string_color("\"", TEAL_ON_BLACK);
+  g_print_string("EXEC \"", 0x3, 0x0);
+  g_print_string(command, 0x3, 0x0);
+  g_print_string("\"\n", 0x3, 0x0);
 
 
   if(compare_string(command, "shutdown") == 0) {
@@ -144,13 +148,14 @@ int cmd(char* command)
   } else if(compare_string(command, "cpuvendor") == 0) {
     unsigned char s[16];
     get_cpu_vendor_string(s);
-    println_string(s);
+    g_print_string(s, 0xf, 0x0);
+    g_print_string("\n", 0x0, 0x0);
     return 0;
   } else if(compare_string(command, "clrscr") == 0) {
-    clrscr(WHITE_ON_BLACK);
+    g_clrscr();
     return 0;
   } else if(compare_string(command, "help") == 0) {
-    println_string("shutdown (qemu)\nreboot\ncpuvendor\nclrscr\nhelp\ndynmen\nticks");
+    g_print_string("shutdown (qemu)\nreboot\ncpuvendor\nclrscr\nhelp\ndynmen\nticks\n", 0xf, 0x0);
     return 0;
   } else if(compare_string(command, "dynmem") == 0) {
     print_dynmem();
@@ -162,7 +167,7 @@ int cmd(char* command)
     uint32_t a = get_ticks();
     char buf[32];
     itos(a, buf);
-    println_string(buf);
+    g_print_string(buf, 0xf, 0x0);
     return 0;
   }
 

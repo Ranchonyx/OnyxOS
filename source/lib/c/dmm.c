@@ -1,7 +1,7 @@
 #include "dmm.h"
 #include "string.h"
 #include "util.h"
-#include "vga.h"
+#include "g_vga.h"
 
 void init_dmm()
 {
@@ -58,7 +58,7 @@ void *_malloc(size_t size)
 void* malloc(int n) {
     int *ptr = (int *) _malloc(n * sizeof(int));
     if (ptr == XNULL) {
-        print_string_color("Memory not allocated.", LCYAN_ON_BLACK);
+        g_print_string("Memory not allocated.", 0x3, 0x0);
     }
 
     return ptr;
@@ -118,31 +118,31 @@ void print_dynmem_node_sz()
 {
   char s[256];
   itos(DYNMEM_NODE_SZ, s);
-  print_string_color("DYNMEM_NODE_SZ = ", LCYAN_ON_BLACK);
-  print_string_color(s, LCYAN_ON_BLACK);
+  g_print_string("DYNMEM_NODE_SZ = ", 0x3, 0x0);
+  g_print_string(s, 0x3, 0x0);
 }
 
 void print_dynmem_node(dynmem_node_t *node)
 {
   char s[256];
   itos(node->sz, s);
-  print_string_color("[NODE{size = ", LCYAN_ON_BLACK);
-  print_string_color(s, LCYAN_ON_BLACK);
+  g_print_string("[NODE{size = ", 0x3, 0x0);
+  g_print_string(s, 0x3, 0x0);
 
   char u[256];
   itos(node->used, u);
-  print_string_color("; used = ", LCYAN_ON_BLACK);
-  print_string_color(u, LCYAN_ON_BLACK);
-  print_string_color("}]", LCYAN_ON_BLACK);
+  g_print_string("; used = ", 0x3, 0x0);
+  g_print_string(u, 0x3, 0x0);
+  g_print_string("}]", 0x3, 0x0);
 }
 
 void print_dynmem()
 {
   dynmem_node_t *current = dynmem_start;
-  print_string_color("[", LCYAN_ON_BLACK);
+  g_print_string("[", 0x3, 0x0);
   while(current != XNULL) {
     print_dynmem_node(current);
     current = current->next;
   }
-  print_string_color("]\n", LCYAN_ON_BLACK);
+  g_print_string("]\n", 0x3, 0x0);
 }

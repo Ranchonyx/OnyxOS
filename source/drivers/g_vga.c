@@ -1,14 +1,35 @@
 #include "g_vga.h"
 #include "util.h"
 #include "math.h"
+#include "stdint.h"
+#include "font.h"
+#include "sys.h"
+
+void init_vga()
+{
+   _cursor.x = 0;
+   _cursor.y = 0;
+}
+
+int g_get_offset(int x, int y)
+{
+  return RES_HORIZONTAL * y + x;
+}
 
 void g_set_pixel(int x, int y, uint16_t vga_color)
 {
   __FB__[RES_HORIZONTAL * y + x] = vga_color;
 }
 
+uint16_t g_get_color(int x, int y)
+{
+  return (uint16_t) __FB__[RES_HORIZONTAL * y + x];
+}
+
 void g_clrscr()
 {
+  _cursor.x = 0;
+  _cursor.y = 0;
   for(int i = 0; i < RES_TOTAL; i++) {
     __FB__[i] = 0x0000;
   }
@@ -83,40 +104,88 @@ void g_line(int x0, int y0, int x1, int y1, uint16_t vga_color)
   }
 }
 
-void g_circle(int cx, int cy, int r, uint16_t vga_color)
+void g_circle(int x0, int y0, int r, uint16_t vga_color)
 {
-  int x = 0;
-  int y = r;
-  int d = 3 - 2 * r;
 
-  g_set_pixel(cx+x, cy+y, vga_color);
-	g_set_pixel(cx-x, cy+y, vga_color);
-	g_set_pixel(cx+x, cy-y, vga_color);
-	g_set_pixel(cx-x, cy-y, vga_color);
-	g_set_pixel(cx+y, cy+x, vga_color);
-	g_set_pixel(cx-y, cy+x, vga_color);
-	g_set_pixel(cx+y, cy-x, vga_color);
-	g_set_pixel(cx-y, cy-x, vga_color);
+    int f = 1 - r;
+    int ddF_x = 0;
+    int ddF_y = -2 * r;
+    int x = 0;
+    int y = r;
 
-  while(y >= x)
-  {
-    x++;
+    g_set_pixel(x0, y0 + r, vga_color);
+    g_set_pixel(x0, y0 - r, vga_color);
+    g_set_pixel(x0 + r, y0, vga_color);
+    g_set_pixel(x0 - r, y0, vga_color);
 
-    if(d > 0) {
-      y--;
-      d = d + 4 * (x-y) + 10;
-    } else {
-      d = d + 4 * x + 6;
-      g_set_pixel(cx+x, cy+y, vga_color);
-      g_set_pixel(cx-x, cy+y, vga_color);
-      g_set_pixel(cx+x, cy-y, vga_color);
-      g_set_pixel(cx-x, cy-y, vga_color);
-      g_set_pixel(cx+y, cy+x, vga_color);
-      g_set_pixel(cx-y, cy+x, vga_color);
-      g_set_pixel(cx+y, cy-x, vga_color);
-      g_set_pixel(cx-y, cy-x, vga_color);
+    while(x < y)
+    {
+      if(f >= 0)
+      {
+        y--;
+        ddF_y += 2;
+        f += ddF_y;
+      }
+      x++;
+      ddF_x += 2;
+      f += ddF_x + 1;
 
+      g_set_pixel(x0 + x, y0 + y, vga_color);
+      g_set_pixel(x0 - x, y0 + y, vga_color);
+      g_set_pixel(x0 + x, y0 - y, vga_color);
+      g_set_pixel(x0 - x, y0 - y, vga_color);
+      g_set_pixel(x0 + y, y0 + x, vga_color);
+      g_set_pixel(x0 - y, y0 + x, vga_color);
+      g_set_pixel(x0 + y, y0 - x, vga_color);
+      g_set_pixel(x0 - y, y0 - x, vga_color);
+    }
+}
+
+void g_set_char(char c, int x, int y, uint16_t fgcolor, uint16_t bgcolor)
+{
+  const uint8_t *glyph = font[c];
+
+  for(size_t yy = 0; yy < 8; yy++) {
+    for(size_t xx = 0; xx < 8; xx++) {
+      if(glyph[yy] & (1 << xx)) {
+        g_set_pixel(x + xx, y + yy, fgcolor);
+      } else {
+        g_set_pixel(x + xx, y + yy, bgcolor);
+      }
     }
   }
+}
 
+void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor)
+{
+  int i = 0;
+  while(str[i] != '\0') {
+
+    if(_cursor.y == RES_VERTICAL-8) {
+
+    }
+
+    if(str[i] == '\n') {
+      _cursor.y += 8;
+      _cursor.x = 0;
+    } else {
+      if(_cursor.x == RES_HORIZONTAL) {
+        _cursor.y += 8;
+        _cursor.x = 0;
+      }
+      g_set_char(str[i], _cursor.x, _cursor.y, fgcolor, bgcolor);
+    }
+    i++;
+    _cursor.x += 8;
+  }
+}
+
+void g_scroll_ln()
+{
+}
+
+void g_print_backspace()
+{
+  _cursor.x = _cursor.x - 8;
+  g_fill_rect(_cursor.x, _cursor.y, _cursor.x+8, _cursor.y+8, 0x0);
 }
