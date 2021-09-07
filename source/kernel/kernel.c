@@ -248,7 +248,7 @@ void main(void)
     //   g_print_string("\n", 0x0, 0x0);
     // }
 
-    char *s = "Hello, Retarded, Humans";
+    char *s = "circle, 10, 10, 10, 0x4";
     char delm[] = ",";
     char *str = strtok(s, delm);
     while(str) {
