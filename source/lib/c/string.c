@@ -59,31 +59,30 @@ return rdest;
 
 char* strtok(char* string, const char* delimiter)
 {
-  static char* buffer;
-  if(string != XNULL)  {
-    buffer = string;
-  }
-
-  if(buffer[0] == '\0') {
+  static int currentIndex = 0;
+  if(!string || !delimiter || string[currentIndex] == '\0') {
     return XNULL;
   }
+  char *buf = (char*) malloc(sizeof(char) * 100);
+  int i = currentIndex;
+  int k = 0;
+  int j = 0;
 
-  char* result = buffer, *b;
-  const char *d;
-
-for(b = buffer; *b != '\0'; b++) {
-  for(d = delimiter; *d != '\0'; d++) {
-    if(*b == *d) {
-      *b = '\0';
-      buffer = b+1;
-
-      if(b == result) {
-        result++;
-        continue;
+  while (string[i] != '\0') {
+    j = 0;
+    while (delimiter[j] != '\0') {
+      if(string[i] != delimiter[j]) {
+        buf[k] = string[i];
+      } else {
+        goto It;
       }
-      return result;
+      j++;
     }
+    i++;
+    k++;
   }
-}
-return result;
+  It:
+  buf[i] = 0;
+  currentIndex = i + 1;
+  return buf;
 }

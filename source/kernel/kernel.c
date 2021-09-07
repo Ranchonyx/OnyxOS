@@ -178,9 +178,10 @@ void main(void)
 	init_timer(1);
   init_keyboard();
   g_clrscr();
+
   g_print_string("]>", 0x3, 0x0);
 
-		uint16_t color = (0x0b+0x30);
+		// uint16_t color = (0x0b+0x30);
 		// ipoint_t points[5] = {
 		// 	{10, 10},
 		// 	{30,  5},
@@ -188,8 +189,8 @@ void main(void)
 		// 	{20, 70},
 		// 	{ 5, 30},
 		// };
-
-
+    //
+    //
 		// g_poly(points, 5, color);
 		// g_rect(70, 20, 90, 70, color);
 		// g_fill_rect(100, 20, 120, 70, color);
@@ -229,14 +230,31 @@ void main(void)
     //     g_fill_rect(x, y, x+10, y+10);
     //     }
     // }
+    //
 
-    char str[] = "Hello, Yeeter";
-    char* ptr;
-    ptr = strtok(str, ",");
-    g_print_string(ptr, 0xf, 0x0);
-    while(ptr != 0) {
-      ptr = strtok(XNULL, ",");
-      g_print_string(ptr, 0xf, 0x0);
+
+    // char str[] = "Hello, Yeeter";
+    // char* ptr = strtok(str, "y");
+    // char* arr[2];
+    // int i = 0;
+    // while(ptr != 0) {
+    //   arr[i] = ptr;
+    //   ptr = strtok(XNULL, ",");
+    // }
+    //
+    // for (int i = 0; i < 3; i++) {
+    //   g_print_string("Value: ", 0xf, 0x0);
+    //   g_print_string(arr[i], 0xf, 0x0);
+    //   g_print_string("\n", 0x0, 0x0);
+    // }
+
+    char *s = "Hello, Retarded, Humans";
+    char delm[] = ",";
+    char *str = strtok(s, delm);
+    while(str) {
+      g_print_string(str, 0xf, 0x0);
+      g_print_string("\n", 0x0, 0x0);
+      str = strtok(s, delm);
     }
 
 
