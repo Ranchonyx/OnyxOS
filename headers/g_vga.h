@@ -34,6 +34,8 @@ void g_fill_rect(int x0, int y0, int x1, int y1, uint16_t vga_color);
 void g_poly(ipoint_t* points, size_t count, uint16_t vga_color);
 void g_line(int x0, int y0, int x1, int y1, uint16_t vga_color);
 void g_circle(int cx, int cy, int r, uint16_t vga_color);
+void g_t_set_char(char c, int x, int y, uint16_t fgcolor);
+void g_t_print_string(const char* str, uint16_t fgcolor);
 void g_set_char(const char c, int x, int y, uint16_t fgcolor, uint16_t bgcolor);
 void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor);
 void g_print_backspace();

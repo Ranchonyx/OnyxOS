@@ -156,9 +156,58 @@ void g_set_char(char c, int x, int y, uint16_t fgcolor, uint16_t bgcolor)
   }
 }
 
+void g_t_set_char(char c, int x, int y, uint16_t fgcolor)
+{
+  const uint8_t *glyph = font[c];
+
+  for(size_t yy = 0; yy < 8; yy++) {
+    for(size_t xx = 0; xx < 8; xx++) {
+      if(glyph[yy] & (1 << xx)) {
+        g_set_pixel(x + xx, y + yy, fgcolor);
+      } else {
+        g_set_pixel(x + xx, y + yy, g_get_color(x + xx, y + yy));
+      }
+    }
+  }
+}
+
+void g_t_print_string(const char* str, uint16_t fgcolor)
+{
+  int i = 0;
+  if(str[0] == '\n' && str[1] == '\0') {
+    _cursor.y += 8;
+    _cursor.x = 0;
+    return;
+  }
+  while(str[i] != '\0') {
+
+    if(_cursor.y == RES_VERTICAL-8) {
+
+    }
+
+    if(str[i] == '\n') {
+      _cursor.y += 8;
+      _cursor.x = 0;
+    } else {
+      if(_cursor.x == RES_HORIZONTAL) {
+        _cursor.y += 8;
+        _cursor.x = 0;
+      }
+      g_t_set_char(str[i], _cursor.x, _cursor.y, fgcolor);
+    }
+    i++;
+    _cursor.x += 8;
+  }
+}
+
 void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor)
 {
   int i = 0;
+  if(str[0] == '\n' && str[1] == '\0') {
+    _cursor.y += 8;
+    _cursor.x = 0;
+    return;
+  }
   while(str[i] != '\0') {
 
     if(_cursor.y == RES_VERTICAL-8) {
