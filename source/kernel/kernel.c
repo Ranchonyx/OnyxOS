@@ -11,12 +11,13 @@
 #include "ports.h"
 #include "textmode_gfx.h"
 
-unsigned char cpustring[16];
+unsigned char cpustring[16]
+;
 
 void prologue()
 {
 
-	clrscr();
+	//clrscr();
 
 	print_string("ISRs : ");
 	isr_install();
