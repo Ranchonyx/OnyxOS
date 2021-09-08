@@ -91,4 +91,15 @@ void prologue()
 void main(void)
 {
 		prologue();
+
+    static unsigned char* __IVT__ = (unsigned char*) 0x00100000;
+    for(int i = 0; i < 0x00EFFFFF; i++) {
+      unsigned char data = __IVT__[i];
+      char *buf = (char*) malloc(sizeof(char)*16);
+      itos(data, buf);
+      print_string(buf);
+      print_string(" ");
+      free(buf);
+    }
+
 }
