@@ -1,18 +1,13 @@
 #include "timer.h"
 #include "sys.h"
-#include "vga.h"
 #include "util.h"
 #include "ISR.h"
 #include "keyboard.h"
-#include "stdbool.h"
 #include "dmm.h"
 #include "string.h"
 #include "speaker.h"
-#include "ports.h"
 #include "g_vga.h"
 #include "stdint.h"
-#include "math.h"
-#include "complex.h"
 
 unsigned char cpustring[16];
 
@@ -138,7 +133,7 @@ void prologue()
 	}
 
 		delay(1000);
-		clrscr();
+		g_clrscr();
 
 		// println_string_color("     _/_/                                    _/_/      _/_/_/   ", YELLOW_ON_BLACK);
 		// println_string_color("  _/    _/  _/_/_/    _/    _/  _/    _/  _/    _/  _/          ", YELLOW_ON_BLACK);
@@ -150,7 +145,7 @@ void prologue()
 
 		beep(2415, 1);
 
-		g_t_print_string("OnyxOS Running on ", 0xf);
+		g_t_print_string("OnyxOS running on ", 0xf);
 		g_t_print_string(cpustring, 0x3);
     g_t_print_string("\n",0x0);
 		char *d = (char*) malloc(sizeof(char)*16);
@@ -160,12 +155,12 @@ void prologue()
 		append(d, 'B');
 		append(e, 'B');
 		g_t_print_string("Total dynamic memory: ", 0xf);
-		print_string_color(d, 0x3);
+		g_t_print_string(d, 0x3);
 		g_t_print_string(" (-16B)\n", 0x3);
 		g_t_print_string("Dynamic node size: ", 0xf);
 		g_t_print_string(e, 0x3);
     g_t_print_string("\n",0x0);
-		g_t_print_string("Copyright (c) 2021 Yuri Khordal, Felix Janetzki\n",0xf);
+		g_t_print_string("(c) 2021 Yuri Khordal, Felix Janetzki\n",0xf);
 		g_t_print_string("]> ", 0x3);
 	}
 
@@ -174,25 +169,24 @@ void main(void)
 {
   prologue();
   beep(2415, 1);
+  // plotMandel(-2, 1, -2, 200, -1);
+
+		uint16_t color = (0xa+0x20);
+		ipoint_t points[5] = {
+			{10, 10},
+			{30,  5},
+			{50, 15},
+			{20, 70},
+			{ 5, 30},
+		};
 
 
-		// uint16_t color = (0x0b+0x30);
-		// ipoint_t points[5] = {
-		// 	{10, 10},
-		// 	{30,  5},
-		// 	{50, 15},
-		// 	{20, 70},
-		// 	{ 5, 30},
-		// };
-    //
-    //
-		// g_poly(points, 5, color);
-		// g_rect(70, 20, 90, 70, color);
-		// g_fill_rect(100, 20, 120, 70, color);
-		// g_line(100, 100, 200, 130, color);
-		// g_circle(100, 100, 45, color);
-    //
-    //
+		g_poly(points, 5, color);
+		g_rect(70, 20, 90, 70, color);
+		g_fill_rect(100, 20, 120, 70, color);
+		g_line(100, 100, 200, 130, color);
+		g_circle(100, 100, 45, color);
+    plotMandel(-1.5, 1, -1.4, 200, 0.4);
     // char *s = "circle, 10, 10, 10, 0x4";
     // char delm[] = ",";
     // char *str = strtok(s, delm);

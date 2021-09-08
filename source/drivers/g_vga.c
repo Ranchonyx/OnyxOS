@@ -175,28 +175,25 @@ void g_t_print_string(const char* str, uint16_t fgcolor)
 {
   int i = 0;
   if(str[0] == '\n' && str[1] == '\0') {
-    _cursor.y += 8;
-    _cursor.x = 0;
+    g_print_newline();
     return;
   }
+
   while(str[i] != '\0') {
 
-    if(_cursor.y == RES_VERTICAL-8) {
+    if(str[i] != '\n') {
 
-    }
+            if(_cursor.x == RES_HORIZONTAL) {
+              g_print_newline();
+            }
+              g_t_set_char(str[i], _cursor.x, _cursor.y, fgcolor);
 
-    if(str[i] == '\n') {
-      _cursor.y += 8;
-      _cursor.x = 0;
-    } else {
-      if(_cursor.x == RES_HORIZONTAL) {
-        _cursor.y += 8;
-        _cursor.x = 0;
-      }
-      g_t_set_char(str[i], _cursor.x, _cursor.y, fgcolor);
-    }
+              _cursor.x += 8;
+            } else {
+              g_print_newline();
+            }
     i++;
-    _cursor.x += 8;
+
   }
 }
 
@@ -204,33 +201,36 @@ void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor)
 {
   int i = 0;
   if(str[0] == '\n' && str[1] == '\0') {
-    _cursor.y += 8;
-    _cursor.x = 0;
+    g_print_newline();
     return;
   }
+
   while(str[i] != '\0') {
 
-    if(_cursor.y == RES_VERTICAL-8) {
+    if(str[i] != '\n') {
 
-    }
+            if(_cursor.x == RES_HORIZONTAL) {
+              g_print_newline();
+            }
+              g_set_char(str[i], _cursor.x, _cursor.y, fgcolor, bgcolor);
 
-    if(str[i] == '\n') {
-      _cursor.y += 8;
-      _cursor.x = 0;
-    } else {
-      if(_cursor.x == RES_HORIZONTAL) {
-        _cursor.y += 8;
-        _cursor.x = 0;
-      }
-      g_set_char(str[i], _cursor.x, _cursor.y, fgcolor, bgcolor);
-    }
+              _cursor.x += 8;
+            } else {
+              g_print_newline();
+            }
     i++;
-    _cursor.x += 8;
+
   }
 }
 
 void g_scroll_ln()
 {
+}
+
+void g_print_newline()
+{
+  _cursor.x = 0;
+  _cursor.y += 8;
 }
 
 void g_print_backspace()

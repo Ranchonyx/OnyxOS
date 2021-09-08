@@ -41,5 +41,6 @@ void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor);
 void g_print_backspace();
 void g_scroll_ln();
 int  g_get_offset(int x, int y);
+void g_print_newline();
 
 #endif /* end of include guard: G_VGA_H */

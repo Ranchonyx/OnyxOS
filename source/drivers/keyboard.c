@@ -35,7 +35,7 @@ static void keyboard_callback(registers_t *regs)
       }
     } else if(scancode == 0x1C) {
       //Enter
-      g_print_string("\n", 0x0, 0x0);
+      g_t_print_string("\n", 0x0);
       _cursor.y += 8;
       _cursor.x = 0;
       int retcode = cmd(buffer);
@@ -43,19 +43,19 @@ static void keyboard_callback(registers_t *regs)
       itos(retcode, buf);
 
       if(retcode != 0) {
-        g_print_string("Process returned an error: ", 0xf, 0x0);
-        g_print_string(buf, 0xc, 0x0);
-        g_print_string("\n", 0x0, 0x0);
+        g_t_print_string("Process returned an error: ", 0xf);
+        g_t_print_string(buf, 0xc);
+        g_t_print_string("\n", 0x0);
 
       }
       _cursor.x = 0;
       buffer[0] = '\0';
-      g_print_string("]>", 0x3, 0x0);
+      g_t_print_string("]>", 0x3);
     } else {
       char chr = sc_ascii[(int) scancode];
       append(buffer, chr);
       char str[2] = {chr, '\0'};
-      g_print_string(str, 0xf, 0x0);
+      g_t_print_string(str, 0xf);
     }
 }
 

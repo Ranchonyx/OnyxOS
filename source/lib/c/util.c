@@ -96,14 +96,14 @@ double pow(double base, double exponent)
 	return r;
 }
 
-double sqrt(double x)
-{
-	double r = x;
+	double sqrt(double x)
+	{
+		double r = x;
 
-	__asm__ volatile("fsqrt" : "+t"(r));
+		__asm__ volatile("fsqrt" : "+t"(r));
 
-	return r;
-}
+		return r;
+	}
 
 double sin(double x)
 {
