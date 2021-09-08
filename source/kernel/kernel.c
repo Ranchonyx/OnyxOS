@@ -186,7 +186,10 @@ void main(void)
 		g_fill_rect(100, 20, 120, 70, color);
 		g_line(100, 100, 200, 130, color);
 		g_circle(100, 100, 45, color);
-    plotMandel(-1.5, 1, -1.4, 200, 0.4);
+
+
+
+    // plotMandel(-1.5, 1, -1.4, 200, 0.4);
     // char *s = "circle, 10, 10, 10, 0x4";
     // char delm[] = ",";
     // char *str = strtok(s, delm);

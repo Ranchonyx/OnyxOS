@@ -92,12 +92,10 @@ bool extended_cpuid_available()
 void hang(char *cause)
 {
   // set_cursor(COLS_MAX-(strlen(cause) + strlen(SYS_HANG)));
-  _cursor.y = 0;
-  _cursor.x = (RES_HORIZONTAL-(strlen(cause) + strlen(SYS_HANG)));
+  _cursor.y = RES_VERTICAL-16;
+  _cursor.x = 0;
   g_t_print_string(SYS_HANG, 0x4);
   g_t_print_string(cause, 0x4);
-  _cursor.x = 0;
-  _cursor.y = 0;
   __asm__ volatile("cli; hlt");
 }
 
