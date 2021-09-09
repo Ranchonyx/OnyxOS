@@ -34,7 +34,7 @@ void plotMandel(double _min_re, double _max_re, double _min_im, int max_iter, do
 
       for(int iter = 1; iter < max_iter; iter++) {
 
-        color = UINT32_MAX * sin(iter);
+        color = iter;
 
         double z_re2 = z_re * z_re;
         double z_im2 = z_im * z_im;
@@ -169,35 +169,32 @@ void main(void)
 {
   prologue();
   beep(2415, 1);
-  // plotMandel(-2, 1, -2, 200, -1);
 
-		uint16_t color = (0xa+0x20);
-		ipoint_t points[5] = {
-			{10, 10},
-			{30,  5},
-			{50, 15},
-			{20, 70},
-			{ 5, 30},
-		};
-
-
-		g_poly(points, 5, color);
-		g_rect(70, 20, 90, 70, color);
-		g_fill_rect(100, 20, 120, 70, color);
-		g_line(100, 100, 200, 130, color);
-		g_circle(100, 100, 45, color);
+  for(float i = 4; i > 0.1; i-=0.01) {
+    plotMandel(-1.5, 1.5, -1, 100, i);
+    delay(100);
+  }
+    //
+		// uint16_t color = (0xa+0x20);
+		// ipoint_t points[5] = {
+		// 	{10, 10},
+		// 	{30,  5},
+		// 	{50, 15},
+		// 	{20, 70},
+		// 	{ 5, 30},
+		// };
+    //
+    //
+		// g_poly(points, 5, color);
+		// g_rect(70, 20, 90, 70, color);
+		// g_fill_rect(100, 20, 120, 70, color);
+		// g_line(100, 100, 200, 130, color);
+		// g_circle(100, 100, 45, color);
 
 
 
     // plotMandel(-1.5, 1, -1.4, 200, 0.4);
-    // char *s = "circle, 10, 10, 10, 0x4";
-    // char delm[] = ",";
-    // char *str = strtok(s, delm);
-    // while(str) {
-    //   g_t_print_string(str, 0xf);
-    //   g_t_print_string("\n", 0x0);
-    //   str = strtok(s, delm);
-    // }
+    
 
 
 }

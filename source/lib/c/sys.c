@@ -89,6 +89,20 @@ bool extended_cpuid_available()
 	return false;
 }
 
+char **argparse(char *cmd)
+{
+  char result[strlen(cmd)];
+  char delm[] = ",";
+  char *str = strtok(cmd, delm);
+  int i = 0;
+  while(str) {
+    result[i] = str;
+    str = strtok(s, delm);
+    i++;
+  }
+  return result;
+}
+
 void hang(char *cause)
 {
   // set_cursor(COLS_MAX-(strlen(cause) + strlen(SYS_HANG)));
