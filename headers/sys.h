@@ -9,12 +9,6 @@
 //   struct linked_list_head *prev;
 //   struct linked_list_head *next;
 // } linked_list_t;
-//
-// typedef struct {
-//   linked_list_t node;
-//   size_t size;
-//   char *block;
-// } alloc_node_t;
 
 
 
