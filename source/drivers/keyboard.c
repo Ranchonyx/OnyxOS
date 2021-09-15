@@ -6,6 +6,7 @@
 #include "ports.h"
 #include "sys.h"
 #include "string.h"
+#include "colors.h"
 
 
 static char buffer[256];
@@ -46,13 +47,13 @@ static void keyboard_callback(registers_t *regs)
 
       if(retcode != 0) {
         g_t_print_string("Process returned an error: ", 0xf);
-        g_t_print_string(buf, 0xc);
+        g_t_print_string(buf, OS_ERROR);
         g_t_print_string("\n", 0x0);
       }
-      
+
       _cursor.x = 0;
       buffer[0] = '\0';
-      g_t_print_string("]>", 0x3);
+      g_t_print_string("]>", OS_INFO);
     } else {
       char chr = sc_ascii[(int) scancode];
       append(buffer, chr);

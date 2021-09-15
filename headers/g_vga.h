@@ -12,7 +12,8 @@
 #define RES_VERTICAL    200
 // #define RES_HORIZONTAL  640
 // #define RES_VERTICAL    480
-
+// #define RES_HORIZONTAL 1024
+// #define RES_VERTICAL   768
 
 //Total resolution, also in bytes
 #define RES_TOTAL       (RES_HORIZONTAL * RES_VERTICAL)

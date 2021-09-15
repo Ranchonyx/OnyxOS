@@ -1,22 +1,16 @@
 #include "kernel.h"
-#include "timer.h"
 #include "sys.h"
+#include "timer.h"
 #include "util.h"
 #include "ISR.h"
 #include "keyboard.h"
 #include "dmm.h"
-#include "string.h"
 #include "speaker.h"
-<<<<<<< HEAD
-#include "ports.h"
-#include "textmode_gfx.h"
-=======
 #include "g_vga.h"
-#include "stdint.h"
->>>>>>> video_mode_0x13_test
+#include "colors.h"
 
-unsigned char cpustring[16]
-;
+char cpustring[16];
+char brandstring[48];
 
 void plotMandel(double _min_re, double _max_re, double _min_im, int max_iter, double scale) {
 
@@ -99,10 +93,8 @@ void plotJulia(int max_iter) {
   }
 }
 
-void prologue()
-{
-
-	//clrscr();
+void prologue() {
+	g_clrscr();
 
 	g_t_print_string("ISRs : ", 0xf);
 	isr_install();
@@ -128,6 +120,7 @@ void prologue()
 	g_t_print_string("OK\n", 0xa);
 
 	get_cpu_vendor_string(cpustring);
+  get_cpu_brand_string(brandstring);
 
 	if(extended_cpuid_available() == false) {
 		g_t_print_string("CPUID: FATAL ERR\n", 0x4);
@@ -138,15 +131,17 @@ void prologue()
 		delay(500);
 		g_t_print_string("OK\n", 0xa);
 	}
-
 		delay(100);
-		clrscr();
-
+		g_clrscr();
 		beep(2415, 1);
 
-		g_t_print_string("OnyxOS running on ", 0xf);
-		g_t_print_string(cpustring, 0x3);
+		g_t_print_string("Platform: ", 0xf);
+		g_t_print_string(cpustring, OS_INFO);
     g_t_print_string("\n",0x0);
+    g_t_print_string("CPU: ", 0xf);
+    g_t_print_string(brandstring, OS_INFO);
+    g_t_print_string("\n", 0x0);
+
 		char *d = (char*) malloc(sizeof(char)*16);
 		char *e = (char*) malloc(sizeof(char)*16);
 		itos(DYNMEM_SZ, d);
@@ -154,18 +149,18 @@ void prologue()
 		append(d, 'B');
 		append(e, 'B');
 		g_t_print_string("Total dynamic memory: ", 0xf);
-		g_t_print_string(d, 0x3);
-		g_t_print_string(" (-16B)\n", 0x3);
+		g_t_print_string(d, OS_INFO);
+		g_t_print_string(" (-16B)\n", OS_INFO);
 		g_t_print_string("Dynamic node size: ", 0xf);
-		g_t_print_string(e, 0x3);
+		g_t_print_string(e, OS_INFO);
     g_t_print_string("\n",0x0);
 		g_t_print_string("(c) 2021 Yuri Khordal, Felix Janetzki\n",0xf);
-		g_t_print_string("]> ", 0x3);
-	}
+		g_t_print_string("]> ", OS_INFO);
+}
 
 //Main kernel entry point
 void main(void)
 {
-		prologue();
+  prologue();
 
 }

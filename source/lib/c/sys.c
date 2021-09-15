@@ -6,6 +6,7 @@
 #include "ports.h"
 #include "dmm.h"
 #include "util.h"
+#include "colors.h"
 
 //Linux Kernel implementation
 inline void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
@@ -17,11 +18,13 @@ inline void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *
               "=c" (*ecx),
               "=d" (*edx)
             : "0" (*eax), "2" (*ecx));
+
 }
 
 //Special thanks to Fast-Nop for the char extraction help and patience with me
-char *register_to_string(unsigned reg)
+char *register_to_string(uint32_t reg)
 {
+
 	char regtext[4];
 	char* regtext_ptr = regtext;
 	char c1 = (char) (reg >> 24);
@@ -53,6 +56,31 @@ void get_cpu_vendor_string(char dest[])
 	strcat(dest, register_to_string(edx));
 	strcat(dest, register_to_string(ecx));
 
+}
+
+void get_cpu_brand_string(char dest[])
+{
+  char *buf = (char*) malloc(sizeof(char) * (16*3));
+  uint32_t ebx, ecx, edx;
+  uint32_t eax = 0x80000002;
+  native_cpuid(&eax, &ebx, &ecx, &edx);
+  strcat(buf, register_to_string(eax));
+  strcat(buf, register_to_string(ebx));
+  strcat(buf, register_to_string(ecx));
+  strcat(buf, register_to_string(edx));
+  eax = 0x80000003;
+  native_cpuid(&eax, &ebx, &ecx, &edx);
+  strcat(buf, register_to_string(eax));
+  strcat(buf, register_to_string(ebx));
+  strcat(buf, register_to_string(ecx));
+  strcat(buf, register_to_string(edx));
+  eax = 0x80000004;
+  native_cpuid(&eax, &ebx, &ecx, &edx);
+  strcat(buf, register_to_string(eax));
+  strcat(buf, register_to_string(ebx));
+  strcat(buf, register_to_string(ecx));
+  strcat(buf, register_to_string(edx));
+  memcpy(dest, buf, strlen(buf)+1);
 }
 
 void* memcpy(void* dest, const void* src, size_t n)
@@ -113,28 +141,6 @@ void hang(char *cause)
   __asm__ volatile("cli; hlt");
 }
 
-//Some really unhealthy shit right here
-void restart_kernel()
-{
-  g_t_print_string("KRESTART NOW", 0xe);
-  __asm__ volatile("jmp 0x9000");
-}
-
-//Dunno what it's for just wanted to implement it have a nice day
-uint8_t __cmos__getMemory()
-{
-  unsigned short total;
-  unsigned char low, hi;
-
-  outb(0x70, 0x30);
-  low = inb(0x71);
-  outb(0x70, 0x31);
-  hi = inb(0x71);
-
-  total = low | hi << 8;
-  return total;
-}
-
 void delay(uint32_t millis) {
 	uint32_t tgt = get_ticks()+(millis / 10);;
 	while(get_ticks() <= tgt) {
@@ -147,9 +153,9 @@ void delay(uint32_t millis) {
 int cmd(char* command)
 {
   lower(command);
-  g_t_print_string("EXEC \"", 0x3);
-  g_t_print_string(command, 0x3);
-  g_t_print_string("\"\n", 0x3);
+  g_t_print_string("EXEC \"", OS_INFO);
+  g_t_print_string(command, OS_INFO);
+  g_t_print_string("\"\n", OS_INFO);
 
 
   if(compare_string(command, "shutdown") == 0) {

@@ -41,35 +41,6 @@ Value     Name
 
 Real              Virtual           Name
             7C00              7C00  _start
-<<<<<<< HEAD
-            7C03              7C03  asciitest
-            7C30              7C30  done
-            7C3E              7C3E  launch
-            7C5B              7C5B  protmode_msg
-            7C84              7C84  error
-            7CA7              7CA7  BOOT_DRIVE
-            7CA8              7CA8  PrintNewline
-            7CB3              7CB3  PrintString
-            7CC4              7CC4  PrintDone
-            7CCE              7CCE  PrintAsciiCharacters
-            7CCE              7CCE  loop
-            7CDD              7CDD  exit
-            7CDE              7CDE  Clearscr
-            7CE7              7CE7  loader_entry
-            7D1F              7D1F  disk_load
-            7D36              7D36  disk_err
-            7D40              7D40  sect_err
-            7D4A              7D4A  disk_loop
-            7D4C              7D4C  gdt_null
-            7D54              7D54  gdt_code
-            7D5C              7D5C  gdt_data
-            7D64              7D64  gdt_end
-            7D64              7D64  gdt_desc
-            7D6A              7D6A  sw32
-            7D7F              7D7F  init32
-            7D99              7D99  lkernel
-            7DA6              7DA6  BEGIN_32_BIT
-=======
             7C09              7C09  asciitest
             7C36              7C36  done
             7C44              7C44  launch
@@ -98,4 +69,3 @@ Real              Virtual           Name
             7D9F              7D9F  lkernel
             7DAC              7DAC  BEGIN_32_BIT
 
->>>>>>> video_mode_0x13_test

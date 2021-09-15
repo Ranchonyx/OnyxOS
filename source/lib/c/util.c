@@ -7,12 +7,16 @@
 
 void reverse(char s[])
 {
-	char c;
-	size_t i, j;
-	for(i = 0, j = strlen(s) - 1; i < j; i++, j--) {
-		c = s[i];
-		s[i] = s[j];
-		s[j] = c;
+	int g, numb;
+	int tmpry = 0;
+
+	for(numb=0; s[numb] != 0; numb++);
+	
+	for(g = 0; g <numb/2; g++)
+	{
+			tmpry = s[g];
+			s[g]=s[numb - 1 - g];
+			s[numb - 1 - g] = tmpry;
 	}
 }
 

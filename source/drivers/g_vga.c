@@ -291,6 +291,9 @@ void g_print_newline()
 
 void g_print_backspace()
 {
+  if(graphics_mode != 1) {
+    g_toggle_graphics_mode();
+  }
   _cursor.x = _cursor.x - 8;
   g_fill_rect(_cursor.x, _cursor.y, _cursor.x+8, _cursor.y+8, 0x0);
 }
