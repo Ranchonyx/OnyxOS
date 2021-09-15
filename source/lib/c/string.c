@@ -1,4 +1,5 @@
 #include "string.h"
+#include "dmm.h"
 
 
 size_t strlen(const char* str)
@@ -54,4 +55,34 @@ while (*dest)
 while (*dest++ = *src++)
   ;
 return rdest;
+}
+
+char* strtok(char* string, const char* delimiter)
+{
+  static int currentIndex = 0;
+  if(!string || !delimiter || string[currentIndex] == '\0') {
+    return XNULL;
+  }
+  char *buf = (char*) malloc(sizeof(char) * 100);
+  int i = currentIndex;
+  int k = 0;
+  int j = 0;
+
+  while (string[i] != '\0') {
+    j = 0;
+    while (delimiter[j] != '\0') {
+      if(string[i] != delimiter[j]) {
+        buf[k] = string[i];
+      } else {
+        goto It;
+      }
+      j++;
+    }
+    i++;
+    k++;
+  }
+  It:
+  buf[i] = 0;
+  currentIndex = i + 1;
+  return buf;
 }

@@ -2,11 +2,10 @@
 #include "sys.h"
 #include "util.h"
 #include "sys_strings.h"
-#include "vga.h"
+#include "g_vga.h"
 #include "ports.h"
 #include "dmm.h"
 #include "util.h"
-#include "speaker.h"
 
 //Linux Kernel implementation
 inline void native_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
@@ -90,19 +89,34 @@ bool extended_cpuid_available()
 	return false;
 }
 
+char **argparse(char *cmd)
+{
+  char result[strlen(cmd)];
+  char delm[] = ",";
+  char *str = strtok(cmd, delm);
+  int i = 0;
+  while(str) {
+    result[i] = str;
+    str = strtok(str, delm);
+    i++;
+  }
+  return result;
+}
+
 void hang(char *cause)
 {
-  set_cursor(COLS_MAX-(strlen(cause) + strlen(SYS_HANG)));
-  print_string_color(SYS_HANG, RED_ON_BLACK);
-  println_string_color(cause, RED_ON_BLACK);
-  set_cursor(0);
+  // set_cursor(COLS_MAX-(strlen(cause) + strlen(SYS_HANG)));
+  _cursor.y = RES_VERTICAL-16;
+  _cursor.x = 0;
+  g_t_print_string(SYS_HANG, 0x4);
+  g_t_print_string(cause, 0x4);
   __asm__ volatile("cli; hlt");
 }
 
 //Some really unhealthy shit right here
 void restart_kernel()
 {
-  println_string_color("KRESTART NOW", YELLOW_ON_BLACK);
+  g_t_print_string("KRESTART NOW", 0xe);
   __asm__ volatile("jmp 0x9000");
 }
 
@@ -133,9 +147,9 @@ void delay(uint32_t millis) {
 int cmd(char* command)
 {
   lower(command);
-  print_string_color("EXEC \"", TEAL_ON_BLACK);
-  print_string_color(command, TEAL_ON_BLACK);
-  println_string_color("\"", TEAL_ON_BLACK);
+  g_t_print_string("EXEC \"", 0x3);
+  g_t_print_string(command, 0x3);
+  g_t_print_string("\"\n", 0x3);
 
 
   if(compare_string(command, "shutdown") == 0) {
@@ -144,13 +158,14 @@ int cmd(char* command)
   } else if(compare_string(command, "cpuvendor") == 0) {
     unsigned char s[16];
     get_cpu_vendor_string(s);
-    println_string(s);
+    g_t_print_string(s, 0xf);
+    g_t_print_string("\n", 0x0);
     return 0;
   } else if(compare_string(command, "clrscr") == 0) {
-    clrscr(WHITE_ON_BLACK);
+    g_clrscr();
     return 0;
   } else if(compare_string(command, "help") == 0) {
-    println_string("shutdown (qemu)\nreboot\ncpuvendor\nclrscr\nhelp\ndynmen\nticks");
+    g_t_print_string("shutdown (qemu)\nreboot\ncpuvendor\nclrscr\nhelp\ndynmen\nticks\n", 0xf);
     return 0;
   } else if(compare_string(command, "dynmem") == 0) {
     print_dynmem();
@@ -162,7 +177,8 @@ int cmd(char* command)
     uint32_t a = get_ticks();
     char buf[32];
     itos(a, buf);
-    println_string(buf);
+    g_t_print_string(buf, 0xf);
+    g_t_print_string("\n",0x0);
     return 0;
   }
 

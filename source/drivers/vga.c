@@ -46,8 +46,6 @@ void set_char_xy(size_t x, size_t y, const char chr, const char color)
 	vidmem[(x*2) + (COLS_MAX * y * 2) + 1] = color;
 }
 
-
-
 void print_string(const char *str)
 {
 	size_t offset = get_cursor();

@@ -84,3 +84,59 @@ int abs(int x)
 	int t = (unsigned int) x >> 31;
 	return (- t) ^ (x - t);
 }
+
+double pow(double base, double exponent)
+{
+	double r = 1;
+
+	for(exponent; exponent > 0; exponent--) {
+		r *= base;
+	}
+
+	return r;
+}
+
+	double sqrt(double x)
+	{
+		double r = x;
+
+		__asm__ volatile("fsqrt" : "+t"(r));
+
+		return r;
+	}
+
+double sin(double x)
+{
+	double r = x;
+
+	__asm__ volatile("fsin" : "+t"(r));
+
+	return r;
+}
+
+double cos(double x)
+{
+	return sin(1.5708 + x);
+}
+
+double tan(double x)
+{
+	return sin(x)/sin(1.5708 + x);
+}
+
+uint32_t hwrand32()
+{
+	uint32_t v;
+	__asm__ volatile("rdrand %0" : "=a"(v)::);
+	return v;
+}
+
+uint16_t hwrand16()
+{
+	return (uint16_t) hwrand32();
+}
+
+uint8_t hwrand8()
+{
+	return (uint8_t) hwrand32();
+}

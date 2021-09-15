@@ -1,6 +1,5 @@
 [bits 32]
 
-%include "../../lib/asm/print32.asm"
 ;Extern handlers
 extern isr_handler
 extern irq_handler

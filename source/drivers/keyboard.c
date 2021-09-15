@@ -1,10 +1,12 @@
 #include "keyboard.h"
 #include "ISR.h"
 #include "vga.h"
+#include "g_vga.h"
 #include "util.h"
 #include "ports.h"
 #include "sys.h"
 #include "string.h"
+
 
 static char buffer[256];
 
@@ -28,28 +30,34 @@ static void keyboard_callback(registers_t *regs)
     if(scancode > 57) {
       return;
     }
+
     if(scancode == 0x0E) {
       if(backspace(buffer) == 0) {
-        print_backspace();
+        g_print_backspace();
       }
     } else if(scancode == 0x1C) {
       //Enter
-      println_string("");
+      g_t_print_string("\n", 0x0);
+      _cursor.y += 8;
+      _cursor.x = 0;
       int retcode = cmd(buffer);
       char buf[4];
       itos(retcode, buf);
 
       if(retcode != 0) {
-        print_string("Process returned an error: ");
-        println_string_color(buf, LRED_ON_BLACK);
+        g_t_print_string("Process returned an error: ", 0xf);
+        g_t_print_string(buf, 0xc);
+        g_t_print_string("\n", 0x0);
       }
+      
+      _cursor.x = 0;
       buffer[0] = '\0';
-      print_string_color("]> ", TEAL_ON_BLACK);
+      g_t_print_string("]>", 0x3);
     } else {
       char chr = sc_ascii[(int) scancode];
       append(buffer, chr);
       char str[2] = {chr, '\0'};
-      print_string(str);
+      g_t_print_string(str, 0xf);
     }
 }
 
