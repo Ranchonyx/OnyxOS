@@ -11,6 +11,18 @@ void init_vga()
    _cursor.y = 0;
 }
 
+void g_toggle_graphics_mode()
+{
+  // graphics_mode == 1 ? 0 : 1;
+  if(graphics_mode == 1) {
+    graphics_mode = 0;
+  } else if(graphics_mode == 0) {
+    graphics_mode = 1;
+  } else {
+    hang("Invalid Graphics Mode");
+  }
+}
+
 int g_get_offset(int x, int y)
 {
   return RES_HORIZONTAL * y + x;
@@ -37,6 +49,9 @@ void g_clrscr()
 
 void g_rect(int x0, int y0, int x1, int y1, uint16_t vga_color)
 {
+  if(graphics_mode != 1) {
+    return;
+  }
 
   ipoint_t p0 = {x0, y0};
   ipoint_t p1 = {x0, y1};
@@ -52,6 +67,10 @@ void g_rect(int x0, int y0, int x1, int y1, uint16_t vga_color)
 
 void g_fill_rect(int x0, int y0, int x1, int y1, uint16_t vga_color)
 {
+  if(graphics_mode != 1) {
+    return;
+  }
+
     for(int x = x0; x < x1; x++) {
       for(int y = y0; y < y1; y++) {
         g_set_pixel(x, y, vga_color);
@@ -61,6 +80,9 @@ void g_fill_rect(int x0, int y0, int x1, int y1, uint16_t vga_color)
 
 void g_poly(ipoint_t* points, size_t count, uint16_t vga_color)
 {
+  if(graphics_mode != 1) {
+    return;
+  }
 
   //Polygon can't have less than 3 points / vertices
   if(count < 3) {
@@ -85,6 +107,9 @@ void g_poly(ipoint_t* points, size_t count, uint16_t vga_color)
 
 void g_line(int x0, int y0, int x1, int y1, uint16_t vga_color)
 {
+  if(graphics_mode != 1) {
+    return;
+  }
 
   int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
   int dy =  -abs(y1-y0), sy = y0<y1 ? 1 : -1;
@@ -106,6 +131,9 @@ void g_line(int x0, int y0, int x1, int y1, uint16_t vga_color)
 
 void g_circle(int x0, int y0, int r, uint16_t vga_color)
 {
+  if(graphics_mode != 1) {
+    return;
+  }
 
     int f = 1 - r;
     int ddF_x = 0;
@@ -144,6 +172,9 @@ void g_circle(int x0, int y0, int r, uint16_t vga_color)
 void g_set_char(char c, int x, int y, uint16_t fgcolor, uint16_t bgcolor)
 {
   const uint8_t *glyph = font[c];
+  if( (x > RES_HORIZONTAL || y > RES_VERTICAL) || (x < 0 || y < 0) ) {
+    return;
+  }
 
   for(size_t yy = 0; yy < 8; yy++) {
     for(size_t xx = 0; xx < 8; xx++) {
@@ -159,6 +190,9 @@ void g_set_char(char c, int x, int y, uint16_t fgcolor, uint16_t bgcolor)
 void g_t_set_char(char c, int x, int y, uint16_t fgcolor)
 {
   const uint8_t *glyph = font[c];
+  if( (x > RES_HORIZONTAL || y > RES_VERTICAL) || (x < 0 || y < 0) ) {
+    return;
+  }
 
   for(size_t yy = 0; yy < 8; yy++) {
     for(size_t xx = 0; xx < 8; xx++) {
@@ -181,7 +215,14 @@ void g_t_print_string(const char* str, uint16_t fgcolor)
 
   while(str[i] != '\0') {
 
+
     if(str[i] != '\n') {
+
+            if(_cursor.y >= RES_VERTICAL - 8) {
+              g_scroll_ln();
+              _cursor.y -= 8;
+              _cursor.x = 0;
+            }
 
             if(_cursor.x == RES_HORIZONTAL) {
               g_print_newline();
@@ -209,6 +250,12 @@ void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor)
 
     if(str[i] != '\n') {
 
+            if(_cursor.y >= RES_VERTICAL - 8) {
+              g_scroll_ln();
+              _cursor.y -= 8;
+              _cursor.x = 0;
+            }
+
             if(_cursor.x == RES_HORIZONTAL) {
               g_print_newline();
             }
@@ -225,10 +272,19 @@ void g_print_string(const char* str, uint16_t fgcolor, uint16_t bgcolor)
 
 void g_scroll_ln()
 {
+    memmove(
+      (uint16_t *) (g_get_offset(0, 0) + VGA_MEM_START),
+      (uint16_t *) (g_get_offset(0, 8) + VGA_MEM_START),
+      (RES_VERTICAL * (RES_HORIZONTAL - 1))
+    );
+
 }
 
 void g_print_newline()
 {
+  if(_cursor.y >= RES_VERTICAL -8) {
+    g_scroll_ln();
+  }
   _cursor.x = 0;
   _cursor.y += 8;
 }

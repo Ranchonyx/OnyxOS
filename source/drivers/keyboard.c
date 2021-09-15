@@ -7,6 +7,7 @@
 #include "sys.h"
 #include "string.h"
 
+
 static char buffer[256];
 
 const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
@@ -29,6 +30,7 @@ static void keyboard_callback(registers_t *regs)
     if(scancode > 57) {
       return;
     }
+
     if(scancode == 0x0E) {
       if(backspace(buffer) == 0) {
         g_print_backspace();
@@ -46,8 +48,8 @@ static void keyboard_callback(registers_t *regs)
         g_t_print_string("Process returned an error: ", 0xf);
         g_t_print_string(buf, 0xc);
         g_t_print_string("\n", 0x0);
-
       }
+      
       _cursor.x = 0;
       buffer[0] = '\0';
       g_t_print_string("]>", 0x3);

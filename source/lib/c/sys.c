@@ -97,7 +97,7 @@ char **argparse(char *cmd)
   int i = 0;
   while(str) {
     result[i] = str;
-    str = strtok(s, delm);
+    str = strtok(str, delm);
     i++;
   }
   return result;

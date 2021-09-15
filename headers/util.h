@@ -16,5 +16,9 @@ double  sqrt(double x);
 double  sin(double x);
 double  cos(double x);
 double  tan(double x);
+uint32_t hwrand32();
+uint16_t hwrand16();
+uint8_t hwrand8();
+
 
 #endif /* end of include guard: UTIL_H */

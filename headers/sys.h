@@ -28,7 +28,7 @@ void *memmove (void* dest, const void* src, size_t n);
 char *register_to_string(unsigned reg);
 void get_cpu_vendor_string(char dest[]);
 bool extended_cpuid_available();
-char *argparse(char *cmd)
+char **argparse(char *cmd);
 int  cmd(char* command);
 void delay(uint32_t millis);
 

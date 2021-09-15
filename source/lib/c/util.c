@@ -123,3 +123,20 @@ double tan(double x)
 {
 	return sin(x)/sin(1.5708 + x);
 }
+
+uint32_t hwrand32()
+{
+	uint32_t v;
+	__asm__ volatile("rdrand %0" : "=a"(v)::);
+	return v;
+}
+
+uint16_t hwrand16()
+{
+	return (uint16_t) hwrand32();
+}
+
+uint8_t hwrand8()
+{
+	return (uint8_t) hwrand32();
+}

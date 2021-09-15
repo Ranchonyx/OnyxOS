@@ -33,7 +33,7 @@ bin/sys.bin:            bin/bootloader/mbr.bin bin/kernel/kernel.bin
 	cat $^ > $@
 
 run:	bin/sys.bin
-	sudo qemu-system-x86_64 -s -m 2G -smp sockets=1,cores=4 -enable-kvm -cpu host -soundhw pcspk -drive file=$<,format=raw,index=0,media=disk
+	sudo qemu-system-x86_64 -s -m 2G -smp sockets=2,cores=8 -enable-kvm -cpu host -soundhw pcspk -drive file=$<,format=raw,index=0,media=disk
 
 kernel.elf: obj/lib/asm/kentry.o obj/lib/asm/assembly_functions.o ${OBJ_FILES}
 	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x9000 $^
